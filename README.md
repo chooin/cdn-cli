@@ -6,9 +6,23 @@
 2. 无需租用虚拟主机/虚拟服务器
 3. 无需担心恶意流量攻击
 4. 访问速度快
-...
+5. ...
 
-### 上传编译完成后的资源到 OSS
+### 目录：
+- [创建 OSS](#创建 OSS)
+- [开通 CDN](#开通 CDN)
+- [项目编译完成后自动上传到 OSS](项目编译完成后自动上传到 OSS)
+- [让项目支持 https](#让项目支持支持 https)
+
+## 创建 OSS
+
+待完善...
+
+## 开通 CDN
+
+待完善...
+
+## 项目编译完成后自动上传到 OSS
 
 1. 安装依赖包
 
@@ -21,6 +35,7 @@ npm install co ali-oss walk --save-dev
 2. 将 [deploy.js](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/deploy.js) 拷贝到项目根目录下，编辑 [deploy.js](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/deploy.js) 以下内容
 
 ``` js
+// 建议使用 AccessKey 子用户
 let config = {
   deployDir: '', // 部署以下文件夹里面的内容，如：./dist
   OSS: {
@@ -30,8 +45,6 @@ let config = {
     bucket: '' // 填写你在阿里云申请的 Bucket，如：movin-h5
   }
 }
-
-// 建议使用子用户 AccessKey
 ```
 
 4. 修改 package.json
@@ -39,26 +52,23 @@ let config = {
 ``` js
 // 修改前
 {
-  ...
   "scripts": {
     ...
     "build": "node build/build.js",
     ...
   }
-  ...
 }
 
 // 则修改后
 {
-  ...
   "scripts": {
     ...
     "build": "node build/build.js && node deploy.js",
     ...
   }
-  ...
 }
 ```
 
-### 使用 https
+## 让项目支持支持 https
 
+待完善...
