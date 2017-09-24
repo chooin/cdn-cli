@@ -1,7 +1,6 @@
 let co = require('co')
 let OSS = require('ali-oss')
 let walk = require('walk')
-let files = []
 
 let config = {
   deployDir: '', // 部署以下文件夹里面的内容，如：./dist
@@ -15,6 +14,8 @@ let config = {
   }
 }
 
+let files = []
+
 const client = new OSS({
   region: config.OSS.region,
   bucket: config.OSS.bucket,
@@ -25,7 +26,15 @@ const client = new OSS({
 const upload = files => {
   files.map(file => {
     co(function* () {
-      let result = yield client.put(file.replace(config.deployDir, ''), file)
+      // 所有文件名以 .html 结尾的设置不带缓存
+      let option = file.replace(config.deployDir, '').includes('.html')
+                   ? {
+                       headers: {
+                          'Cache-Control': 'no-cache, private'
+                       }
+                     }
+                   : {}
+      let result = yield client.put(file.replace(config.deployDir, ''), file, option)
       if (result.res.status === 200) {
         console.log(`☘️  上传成功：${result.name}`)
       } else {
