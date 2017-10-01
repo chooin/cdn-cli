@@ -16,11 +16,23 @@
 
 ## 创建OSS
 
-待完善...
+设置默认首页：OSS->选择部署的Bucket->进入Bucket属性->静态网站->配置默认首页(index.html)
+
+绑定域名：OSS->选择部署的Bucket->进入Bucket属性->绑定域名
 
 ## 开通CDN
 
-待完善...
+https: CDN->CDN域名列表->管理->HTTPS安全加速->配置ssl信息->将CNAME修改成CDN的
+
+SSL 证书拼接顺序
+
+www.example.cn.crt
+
+COMODORSADomainValidationSecureServerCA.crt
+
+COMODORSAAddTrustCA.crt
+
+AddTrustExternalCARoot.crt
 
 ## 项目编译完成后自动上传到OSS
 
@@ -32,7 +44,7 @@ yarn add co ali-oss walk --dev
 npm install co ali-oss walk --save-dev
 ```
 
-2. 将 [deploy.js](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/deploy.js) 拷贝到项目根目录下，编辑 [deploy.js](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/deploy.js) 以下内容
+2. 将 [aliyun-cdn-deploy](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/aliyun-cdn-deploy) 拷贝到项目根目录下，编辑 [aliyun-cdn-deploy](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/aliyun-cdn-deploy) 以下内容
 
 ``` js
 let config = {
@@ -65,7 +77,7 @@ let config = {
 {
   "scripts": {
     ...
-    "build": "node build/build.js && node deploy.js",
+    "build": "node build/build.js && node aliyun-cdn-deploy/index.js",
     ...
   }
 }
