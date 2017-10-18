@@ -24,7 +24,7 @@ const client = new OSS({
   accessKeySecret: config.accessKey.secret
 })
 
-const showUploadStatus = res => {
+const consoleUploadStatus = res => {
   if (res.res.status === 200) {
     console.log(`☘️  上传资源文件成功：${res.name}`)
   } else {
@@ -35,27 +35,40 @@ const showUploadStatus = res => {
 const upload = files => {
   co(function* () {
     for (let file of files) {
-      let dir = file.replace(config.deployDir, '')
-      if (!/.html$/.test(dir)) {
-        let res = yield client.put(dir, file, {})
-        showUploadStatus(res)
+      if (file.fielSuffix !== 'html') {
+        let res = yield client.put(file.putPath, file.getPath, {})
+        consoleUploadStatus(res)
       }
     }
     for (let file of files) {
-      let dir = file.replace(config.deployDir, '')
-      if (/.html$/.test(dir)) {
-        let res = yield client.put(dir, file, {
+      if (file.fielSuffix === 'html') {
+        let res = yield client.put(file.putPath, file.getPath, {
                     headers: {
                       'Cache-Control': 'no-cache, private'
                     }
                   })
-        showUploadStatus(res)
+        consoleUploadStatus(res)
       }
     }
   }).catch(_ => {
     console.log(_)
   })
 }
+
+(() => {
+  let walker  = walk.walk(config.deploy.dir, { followLinks: false })
+  walker.on('file', (root, stat, next) => {
+    files.push({
+      getPath: `${root}/${stat.name}`,
+      putPath: `${root}/${stat.name}`.replace(config.deploy.dir, ''),
+      fielSuffix: stat.name.split('.').pop().toLowerCase()
+    })
+    next()
+  })
+  walker.on('end', () => {
+    upload(files)
+  })
+})()
 
 (() => {
   let walker  = walk.walk(config.deployDir, {followLinks: false })
