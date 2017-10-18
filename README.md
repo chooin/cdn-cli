@@ -49,7 +49,7 @@ npm install co ali-oss walk --save-dev
 ``` js
 let config = {
   deploy: {
-    dirs: ['./docs'], // 部署以下文件夹里面的内容，如：./dist
+    dirs: ['./dist'], // 部署以下文件夹里面的内容，如：./dist
     files: ['./index.html'] // 部署以下文件，如：index.html
   },
   OSS: {
