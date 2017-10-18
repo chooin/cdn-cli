@@ -24,39 +24,41 @@ const client = new OSS({
   accessKeySecret: config.accessKey.secret
 })
 
+const showUploadStatus = res => {
+  if (res.res.status === 200) {
+    console.log(`☘️  上传资源文件成功：${res.name}`)
+  } else {
+    console.log(`❌  上传资源文件失败：${res.name}`)
+  }
+}
+
 const upload = files => {
   co(function* () {
     for (let file of files) {
       let dir = file.replace(config.deployDir, '')
       if (!/.html$/.test(dir)) {
-          let result = yield client.put(dir, file, {})
-          if (result.res.status === 200) {
-            console.log(`☘️  上传资源文件成功：${result.name}`)
-          } else {
-            console.log(`❌  上传资源文件失败：${result.name}`)
-          }
+        let res = yield client.put(dir, file, {})
+        showUploadStatus(res)
       }
     }
     for (let file of files) {
       let dir = file.replace(config.deployDir, '')
       if (/.html$/.test(dir)) {
-          let result = yield client.put(dir, file, {
-                          headers: {
-                            'Cache-Control': 'no-cache, private'
-                          }
-                        })
-          if (result.res.status === 200) {
-            console.log(`☘️  上传资源文件成功：${result.name}`)
-          } else {
-            console.log(`❌  上传资源文件失败：${result.name}`)
-          }
+        let res = yield client.put(dir, file, {
+                    headers: {
+                      'Cache-Control': 'no-cache, private'
+                    }
+                  })
+        showUploadStatus(res)
       }
     }
+  }).catch(_ => {
+    console.log(_)
   })
 }
 
 (() => {
-  let walker  = walk.walk(config.deployDir, { followLinks: false })
+  let walker  = walk.walk(config.deployDir, {followLinks: false })
   walker.on('file', (root, stat, next) => {
     files.push(`${root}/${stat.name}`)
     next()
