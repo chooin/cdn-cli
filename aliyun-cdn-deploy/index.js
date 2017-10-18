@@ -3,7 +3,10 @@ let OSS = require('ali-oss')
 let walk = require('walk')
 
 let config = {
-  deployDir: '', // 部署以下文件夹里面的内容，如：./dist
+  deploy: {
+    dirs: ['./docs'], // 部署以下文件夹里面的内容，如：./dist
+    files: ['./index.html'] // 部署以下文件，如：index.html
+  },
   OSS: {
     region: '', // OSS 所在的区域，如：oss-cn-hangzhou
     bucket: '' // 填写你在阿里云申请的 Bucket，如：movin-h5
@@ -14,8 +17,6 @@ let config = {
     secret: '' // 填写阿里云提供的 Access Key Secret，如：v96wAI0Gkx2qVcEO2F1V31231
   }
 }
-
-let files = []
 
 const client = new OSS({
   region: config.OSS.region,
@@ -35,13 +36,13 @@ const consoleUploadStatus = res => {
 const upload = files => {
   co(function* () {
     for (let file of files) {
-      if (file.fielSuffix !== 'html') {
+      if (file.fileSuffix !== 'html') {
         let res = yield client.put(file.putPath, file.getPath, {})
         consoleUploadStatus(res)
       }
     }
     for (let file of files) {
-      if (file.fielSuffix === 'html') {
+      if (file.fileSuffix === 'html') {
         let res = yield client.put(file.putPath, file.getPath, {
                     headers: {
                       'Cache-Control': 'no-cache, private'
@@ -56,26 +57,25 @@ const upload = files => {
 }
 
 (() => {
-  let walker  = walk.walk(config.deploy.dir, { followLinks: false })
+  let walker  = walk.walk('.', { followLinks: false })
+  let files = []
   walker.on('file', (root, stat, next) => {
+    if (config.deploy.dirs.includes(root)) {
+      files.push({
+        getPath: `${root}/${stat.name}`,
+        putPath: `${root}/${stat.name}`.substring(1),
+        fileSuffix: stat.name.split('.').pop().toLowerCase()
+      })
+    }
+    next()
+  })
+  for (let file of config.deploy.files) {
     files.push({
-      getPath: `${root}/${stat.name}`,
-      putPath: `${root}/${stat.name}`.replace(config.deploy.dir, ''),
-      fielSuffix: stat.name.split('.').pop().toLowerCase()
+      getPath: file,
+      putPath: file.substring(1),
+      fileSuffix: file.split('.').pop().toLowerCase()
     })
-    next()
-  })
-  walker.on('end', () => {
-    upload(files)
-  })
-})()
-
-(() => {
-  let walker  = walk.walk(config.deployDir, {followLinks: false })
-  walker.on('file', (root, stat, next) => {
-    files.push(`${root}/${stat.name}`)
-    next()
-  })
+  }
   walker.on('end', () => {
     upload(files)
   })

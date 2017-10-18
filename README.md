@@ -48,7 +48,10 @@ npm install co ali-oss walk --save-dev
 
 ``` js
 let config = {
-  deployDir: '', // 部署以下文件夹里面的内容，如：./dist
+  deploy: {
+    dirs: ['./docs'], // 部署以下文件夹里面的内容，如：./dist
+    files: ['./index.html'] // 部署以下文件，如：index.html
+  },
   OSS: {
     region: '', // OSS 所在的区域，如：oss-cn-hangzhou
     bucket: '' // 填写你在阿里云申请的 Bucket，如：movin-h5
