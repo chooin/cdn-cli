@@ -60,13 +60,15 @@ const upload = files => {
   let walker  = walk.walk('.', { followLinks: false })
   let files = []
   walker.on('file', (root, stat, next) => {
-    if (config.deploy.dirs.includes(root)) {
-      files.push({
-        getPath: `${root}/${stat.name}`,
-        putPath: `${root}/${stat.name}`.substring(1),
-        fileSuffix: stat.name.split('.').pop().toLowerCase()
-      })
-    }
+    config.deploy.dirs.find(d => {
+      if (root.indexOf(d) > -1) {
+        files.push({
+          getPath: `${root}/${stat.name}`,
+          putPath: `${root}/${stat.name}`.substring(1),
+          fileSuffix: stat.name.split('.').pop().toLowerCase()
+        })
+      }
+    })
     next()
   })
   for (let file of config.deploy.files) {
