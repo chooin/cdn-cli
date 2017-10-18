@@ -25,25 +25,33 @@ const client = new OSS({
 })
 
 const upload = files => {
-  files.map(file => {
-    co(function* () {
-      // 所有文件名以 .html 结尾的设置不带缓存
-      let option = file.replace(config.deployDir, '').includes('.html')
-                   ? {
-                       headers: {
-                          'Cache-Control': 'no-cache, private'
-                       }
-                     }
-                   : {}
-      let result = yield client.put(file.replace(config.deployDir, ''), file, option)
-      if (result.res.status === 200) {
-        console.log(`☘️  上传成功：${result.name}`)
-      } else {
-        console.log(`❌  上传失败：${result.name}`)
+  co(function* () {
+    for (let file of files) {
+      let dir = file.replace(config.deployDir, '')
+      if (!/.html$/.test(dir)) {
+          let result = yield client.put(dir, file, {})
+          if (result.res.status === 200) {
+            console.log(`☘️  上传资源文件成功：${result.name}`)
+          } else {
+            console.log(`❌  上传资源文件失败：${result.name}`)
+          }
       }
-    }).catch(err => {
-      console.log(err)
-    })
+    }
+    for (let file of files) {
+      let dir = file.replace(config.deployDir, '')
+      if (/.html$/.test(dir)) {
+          let result = yield client.put(dir, file, {
+                          headers: {
+                            'Cache-Control': 'no-cache, private'
+                          }
+                        })
+          if (result.res.status === 200) {
+            console.log(`☘️  上传资源文件成功：${result.name}`)
+          } else {
+            console.log(`❌  上传资源文件失败：${result.name}`)
+          }
+      }
+    }
   })
 }
 
