@@ -4,8 +4,8 @@ let walk = require('walk')
 
 let config = {
   deploy: {
-    dirs: ['./dist'], // 部署以下文件夹里面的内容，如：./dist
-    files: ['./index.html'] // 部署以下文件，如：index.html
+    dirs: [], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
+    files: [] // 上传以下文件，如：index.html，`->` 重命名文件
   },
   OSS: {
     region: '', // OSS 所在的区域，如：oss-cn-hangzhou
@@ -59,23 +59,37 @@ const upload = files => {
 (() => {
   let walker  = walk.walk('.', { followLinks: false })
   let files = []
+  let getDirs = []
+  let putDirs = []
+  config.deploy.dirs.map(d => {
+    let s = d.split('->')
+    getDirs.push(s[0])
+    putDirs.push(s[1] || s[0])
+  })
   walker.on('file', (root, stat, next) => {
-    config.deploy.dirs.find(d => {
-      if (root.indexOf(d) > -1) {
+    for (let i in getDirs) {
+      if (root.indexOf(getDirs[i]) === 0) {
         files.push({
           getPath: `${root}/${stat.name}`,
-          putPath: `${root}/${stat.name}`.substring(1),
+          putPath: `${putDirs[i]}/${stat.name}`.substring(1),
           fileSuffix: stat.name.split('.').pop().toLowerCase()
         })
       }
-    })
+    }
     next()
   })
-  for (let file of config.deploy.files) {
+  let getFiles = []
+  let putFiles = []
+  config.deploy.files.map(f => {
+    let s = f.split('->')
+    getFiles.push(s[0])
+    putFiles.push(s[1] || s[0])
+  })
+  for (let i in getFiles) {
     files.push({
-      getPath: file,
-      putPath: file.substring(1),
-      fileSuffix: file.split('.').pop().toLowerCase()
+      getPath: getFiles[i],
+      putPath: putFiles[i].substring(1),
+      fileSuffix: getFiles[i].split('.').pop().toLowerCase()
     })
   }
   walker.on('end', () => {

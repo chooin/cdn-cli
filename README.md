@@ -49,8 +49,8 @@ npm install co ali-oss walk --save-dev
 ``` js
 let config = {
   deploy: {
-    dirs: ['./dist'], // 部署以下文件夹里面的内容，如：./dist
-    files: ['./index.html'] // 部署以下文件，如：index.html
+    dirs: ['./dist', './docs->./helps'], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
+    files: ['./index.html', './abc.html->./ABC.html'] // 上传以下文件，如：index.html，`->` 重命名文件
   },
   OSS: {
     region: '', // OSS 所在的区域，如：oss-cn-hangzhou
@@ -80,7 +80,7 @@ let config = {
 {
   "scripts": {
     ...
-    "build": "node build/build.js && node aliyun-cdn-deploy/index.js",
+    "build": "node build/build.js && node cdn-deploy/index.js",
     ...
   }
 }
