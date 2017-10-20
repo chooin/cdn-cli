@@ -44,7 +44,7 @@ yarn add co ali-oss walk --dev
 npm install co ali-oss walk --save-dev
 ```
 
-2. 将 [aliyun-cdn-deploy](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/aliyun-cdn-deploy) 拷贝到项目根目录下，编辑 [aliyun-cdn-deploy](https://github.com/Chooin/aliyun-cdn-deploy-front-end-project/blob/master/aliyun-cdn-deploy) 以下内容
+2. 将 [cdn-deploy](https://github.com/Chooin/cdn-deploy-front-end-project/blob/master/cdn-deploy) 拷贝到项目根目录下，编辑 [cdn-deploy](https://github.com/Chooin/cdn-deploy-front-end-project/blob/master/cdn-deploy) 以下内容
 
 ``` js
 let config = {
