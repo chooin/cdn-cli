@@ -25,20 +25,16 @@ const client = new OSS({
   accessKeySecret: config.accessKey.secret
 })
 
-const consoleUploadStatus = res => {
-  if (res.res.status === 200) {
-    console.log(`☘️  上传资源文件成功：${res.name}`)
-  } else {
-    console.log(`❌  上传资源文件失败：${res.name}`)
-  }
-}
-
 const upload = files => {
   co(function* () {
     for (let file of files) {
       if (file.fileSuffix !== 'html') {
         let res = yield client.put(file.putPath, file.getPath, {})
-        consoleUploadStatus(res)
+        if (res.res.status === 200) {
+          console.log(`☘️  上传资源文件成功：${res.name}`)
+        } else {
+          console.log(`❌  上传资源文件失败：${res.name}`)
+        }
       }
     }
     for (let file of files) {
@@ -48,7 +44,11 @@ const upload = files => {
                       'Cache-Control': 'no-cache, private'
                     }
                   })
-        consoleUploadStatus(res)
+        if (res.res.status === 200) {
+          console.log(`☘️  上传 html 文件成功：${res.name}`)
+        } else {
+          console.log(`❌  上传 html 文件失败：${res.name}`)
+        }
       }
     }
   }).catch(_ => {
@@ -64,14 +64,17 @@ const upload = files => {
   config.deploy.dirs.map(d => {
     let s = d.split('->')
     getDirs.push(s[0])
-    putDirs.push(s[1] || s[0])
+    putDirs.push({
+      s: s[0],
+      e: s[1] || s[0]
+    })
   })
   walker.on('file', (root, stat, next) => {
     for (let i in getDirs) {
       if (root.indexOf(getDirs[i]) === 0) {
         files.push({
           getPath: `${root}/${stat.name}`,
-          putPath: `${putDirs[i]}/${stat.name}`.substring(1),
+          putPath: `${root.replace(putDirs[i].s, putDirs[i].e)}/${stat.name}`.substring(1),
           fileSuffix: stat.name.split('.').pop().toLowerCase()
         })
       }
