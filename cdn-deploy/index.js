@@ -31,9 +31,9 @@ const upload = files => {
       if (file.fileSuffix !== 'html') {
         let res = yield client.put(file.putPath, file.getPath, {})
         if (res.res.status === 200) {
-          console.log(`☘️  上传资源文件成功：${res.name}`)
+          console.log(`☘️  [缓存文件]：${res.name}`)
         } else {
-          console.log(`❌  上传资源文件失败：${res.name}`)
+          console.log(`❌  [缓存文件]：${res.name}`)
         }
       }
     }
@@ -45,9 +45,9 @@ const upload = files => {
                     }
                   })
         if (res.res.status === 200) {
-          console.log(`☘️  上传 html 文件成功：${res.name}`)
+          console.log(`☘️  [无缓存文件]${res.name}`)
         } else {
-          console.log(`❌  上传 html 文件失败：${res.name}`)
+          console.log(`❌  [无缓存文件]${res.name}`)
         }
       }
     }
