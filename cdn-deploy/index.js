@@ -28,17 +28,23 @@ const client = new OSS({
 const upload = files => {
   co(function* () {
     for (let file of files) {
-      if (file.fileSuffix !== 'html') {
+      if (
+        file.fileSuffix !== 'html' &&
+        file.putPath.indexOf('service-worker.js') === -1
+      ) {
         let res = yield client.put(file.putPath, file.getPath, {})
         if (res.res.status === 200) {
-          console.log(`☘️  [缓存文件]：${res.name}`)
+          console.log(`☘️  [有缓存文件]：${res.name}`)
         } else {
-          console.log(`❌  [缓存文件]：${res.name}`)
+          console.log(`❌  [有缓存文件]：${res.name}`)
         }
       }
     }
     for (let file of files) {
-      if (file.fileSuffix === 'html') {
+      if (
+        file.fileSuffix === 'html' ||
+        file.putPath.indexOf('service-worker.js') > -1
+      ) {
         let res = yield client.put(file.putPath, file.getPath, {
                     headers: {
                       'Cache-Control': 'no-cache, private'
