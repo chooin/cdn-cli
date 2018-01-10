@@ -15,6 +15,11 @@ let config = {
   accessKey: {
     id: '', // 填写阿里云提供的 Access Key ID，如：LTAIR1m312sdawwq
     secret: '' // 填写阿里云提供的 Access Key Secret，如：v96wAI0Gkx2qVcEO2F1V31231
+  },
+  // 不缓存
+  noCache: {
+    fileSuffix: ['html'], // 文件类型
+    fileName: ['service-worker.js'] // 文件名称
   }
 }
 
@@ -29,21 +34,21 @@ const upload = files => {
   co(function* () {
     for (let file of files) {
       if (
-        file.fileSuffix !== 'html' &&
-        file.putPath.indexOf('service-worker.js') === -1
+        config.noCache.fileSuffix.find(suffix => suffix !== file.fileSuffix) &&
+        config.noCache.fileName.find(name => file.putPath.split('/').indexOf(name) === -1)
       ) {
         let res = yield client.put(file.putPath, file.getPath, {})
         if (res.res.status === 200) {
-          console.log(`☘️  [有缓存文件]：${res.name}`)
+          console.log(`☘️  [Cache]：${res.name}`)
         } else {
-          console.log(`❌  [有缓存文件]：${res.name}`)
+          console.log(`❌  [Cache]：${res.name}`)
         }
       }
     }
     for (let file of files) {
       if (
-        file.fileSuffix === 'html' ||
-        file.putPath.indexOf('service-worker.js') > -1
+        config.noCache.fileSuffix.find(suffix => suffix === file.fileSuffix) &&
+        config.noCache.fileName.find(name => file.putPath.split('/').indexOf(name) > -1)
       ) {
         let res = yield client.put(file.putPath, file.getPath, {
                     headers: {
@@ -51,9 +56,9 @@ const upload = files => {
                     }
                   })
         if (res.res.status === 200) {
-          console.log(`☘️  [无缓存文件]${res.name}`)
+          console.log(`☘️  [No cache]${res.name}`)
         } else {
-          console.log(`❌  [无缓存文件]${res.name}`)
+          console.log(`❌  [No cache]${res.name}`)
         }
       }
     }
