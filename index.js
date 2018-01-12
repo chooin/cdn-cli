@@ -15,7 +15,7 @@ const uploadLog = ({
 
 const config = {
   deploy: {
-    dirs: [], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
+    dirs: ['./node_modules'], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
     files: [] // 上传以下文件，如：index.html，`->` 重命名文件
   },
   OSS: {
@@ -39,12 +39,12 @@ const config = {
   }
 }
 
-const client = new OSS({
-  region: config.OSS.region,
-  bucket: config.OSS.bucket,
-  accessKeyId: config.accessKey.id,
-  accessKeySecret: config.accessKey.secret
-})
+// const client = new OSS({
+//   region: config.OSS.region,
+//   bucket: config.OSS.bucket,
+//   accessKeyId: config.accessKey.id,
+//   accessKeySecret: config.accessKey.secret
+// })
 
 const upload = files => {
   co(function* () {
@@ -84,16 +84,16 @@ const upload = files => {
   walker.on('file', (root, stat, next) => {
     for (let i in getDirs) {
       if (root.indexOf(getDirs[i]) === 0) {
+        let fileSuffix = stat.name.split('.').pop().toLowerCase()
+        let fileName = `${stat.name}`.substring(1).split('/').pop()
         let file = {
           getPath: `${root}/${stat.name}`,
           putPath: `${root.replace(putDirs[i].s, putDirs[i].e)}/${stat.name}`.substring(1),
-          fileSuffix: stat.name.split('.').pop().toLowerCase(),
-          hasCache: config.noCache.fileSuffix.find(suffix => suffix === file.fileSuffix) &&
-                    config.noCache.fileName.find(name => file.putPath.split('/').indexOf(name) > -1)
+          hasCache: config.noCache.fileSuffix.find(suffix => suffix === fileSuffix) && config.noCache.fileName.find(name => fileName.indexOf(name) > -1) ? true : false
         }
         if (
-          config.lastUpload.fileSuffix.find(suffix => suffix === file.fileSuffix) &&
-          config.lastUpload.fileName.find(name => file.putPath.split('/').indexOf(name) > -1)
+          config.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) &&
+          config.lastUpload.fileName.find(name => fileName.indexOf(name) > -1)
         ) {
           files.push(file)
         } else {
@@ -111,11 +111,24 @@ const upload = files => {
     putFiles.push(s[1] || s[0])
   })
   for (let i in getFiles) {
-    files.push({
+    let fileSuffix = putFiles[i].split('.').pop().toLowerCase()
+    let fileName = putFiles[i].substring(1).split('/').pop()
+    let file = {
       getPath: getFiles[i],
       putPath: putFiles[i].substring(1),
-      fileSuffix: getFiles[i].split('.').pop().toLowerCase()
-    })
+      hasCache: config.noCache.fileSuffix.find(suffix => suffix === fileSuffix) && config.noCache.fileName.find(name => fileName.indexOf(name) > -1) ? true : false
+    }
+    if (
+      config.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) &&
+      config.lastUpload.fileName.find(name => fileName.indexOf(name) > -1)
+    ) {
+      files.push(file)
+    } else {
+      files.unshift(file)
+    }
   }
-  walker.on('end', () => upload(files))
+  walker.on('end', () => {
+    console.log(files)
+    // upload(files)
+  })
 })()

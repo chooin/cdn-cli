@@ -1,0 +1,25 @@
+{
+  "name": "cdn-deply-cli",
+  "version": "1.0.0",
+  "description": "使用 cdn 部署项目的好处:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chooin/cdn-deploy-front-end-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chooin/cdn-deploy-front-end-project/issues"
+  },
+  "homepage": "https://github.com/Chooin/cdn-deploy-front-end-project#readme",
+  "devDependencies": {
+    "ali-oss": "^4.11.4",
+    "co": "^4.6.0",
+    "walk": "^2.3.9"
+  }
+}
