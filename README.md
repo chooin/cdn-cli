@@ -11,8 +11,8 @@
 ### 目录：
 - [创建OSS](#创建OSS)
 - [开通CDN](#开通CDN)
-- [项目编译完成后自动上传到OSS](项目编译完成后自动上传到OSS)
-- [让项目支持https](#让项目支持支持https)
+- [项目编译完成后自动上传到OSS](#项目编译完成后自动上传到OSS)
+- [让项目支持https](#让项目支持https)
 
 ## 创建OSS
 
@@ -93,13 +93,13 @@ cdn-deploy deploy
 
 5. 不将 config 文件提交到 git
 
-在项目添加 .gitignore 添加下面内容
+在项目下添加 .gitignore 文件，然后在 .gitignore 文件中添加下面内容
 
 ``` gitignore
 deploy-config/*.config.json
 ```
 
-## 让项目支持支持https
+## 让项目支持https
 
 1. 如何获得 SSL 证书
 
