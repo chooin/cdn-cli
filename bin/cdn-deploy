@@ -4,6 +4,7 @@ const program = require('commander')
 const chalk = require('chalk')
 const fs = require('fs')
 const path = require('path')
+const shell = require('shelljs')
 const {
   createFile,
   hasFile
@@ -26,9 +27,14 @@ program
           replaceKey: 'aliyun'
         })
       })
-    }).catch(() => {
-      console.log('Cancelled')
-    })
+    }).catch(() => console.log('Cancelled'))
+  })
+
+program
+  .command('deploy')
+  .description(chalk.gray('Deploy project'))
+  .action(() => {
+    shell.exec(`node ${path.resolve(__dirname, '../index.js')}`)
   })
 
 program.on('--help', () => {
