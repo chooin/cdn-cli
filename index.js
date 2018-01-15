@@ -6,12 +6,15 @@ const aliyun = require('./utils/aliyun')
 const upload = files => {
   co(function* () {
     for (let file of files) {
-      if (config.type === 'aliyun') {
-        yield aliyun.upload({
-          putPath: file.putPath,
-          getPath: file.getPath,
-          hasCache: file.hasCache
-        })
+      switch (config.type) {
+        case 'aliyun': {
+          yield aliyun.upload({
+            putPath: file.putPath,
+            getPath: file.getPath,
+            hasCache: file.hasCache
+          })
+          break
+        }
       }
     }
   }).catch(_ => console.log(_))
