@@ -39,51 +39,56 @@ AddTrustExternalCARoot.crt
 1. 安装依赖包
 
 ``` sh
-yarn add co ali-oss walk --dev
-# or
-npm install co ali-oss walk --save-dev
+yarn global add cdn-deply-cli # or npm install cdn-deploy-cli -g
 ```
 
-2. 将 [cdn-deploy](https://github.com/Chooin/cdn-deploy-cli/blob/master/cdn-deploy) 拷贝到项目根目录下，编辑 [cdn-deploy](https://github.com/Chooin/cdn-deploy-cli/blob/master/cdn-deploy) 以下内容
+2. 初始化项目
 
-``` js
-let config = {
-  deploy: {
-    dirs: ['./dist', './docs->./helps'], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
-    files: ['./index.html', './abc.html->./ABC.html'] // 上传以下文件，如：index.html，`->` 重命名文件
+``` sh
+cdn-deploy init
+```
+
+3. 配置
+
+deploy-config/aliyun.config.json
+
+``` json
+{
+  "oss": {
+    "region": "oss-cn-hangzhou",
+    "bucket": "your project"
   },
-  OSS: {
-    region: '', // OSS 所在的区域，如：oss-cn-hangzhou
-    bucket: '' // 填写你在阿里云申请的 Bucket，如：movin-h5
-  },
-  // 建议使用 AccessKey 子用户
-  accessKey: {
-    id: '', // 填写阿里云提供的 Access Key ID，如：LTAIR1m312sdawwq
-    secret: '' // 填写阿里云提供的 Access Key Secret，如：v96wAI0Gkx2qVcEO2F1V31231
+  "accessKey": {
+    "id": "",
+    "secret": ""
   }
 }
 ```
 
-3. 修改 package.json
+deploy-config/config.json
 
-``` js
-// 修改前
+``` json
 {
-  "scripts": {
-    ...
-    "build": "node build/build.js",
-    ...
+  "type": "aliyun",
+  "deploy": {
+    "dirs": ["./dist->."],
+    "files": []
+  },
+  "noCache": {
+    "fileSuffix": ["html"],
+    "fileName": ["service-worker.js"]
+  },
+  "lastUpload": {
+    "fileSuffix": ["html"],
+    "fileName": []
   }
 }
+```
 
-// 修改后
-{
-  "scripts": {
-    ...
-    "build": "node build/build.js && node cdn-deploy/index.js",
-    ...
-  }
-}
+4. 发布项目
+
+``` sh
+cdn-deploy deploy
 ```
 
 ## 让项目支持支持https
