@@ -4,7 +4,7 @@ const walk = require('walk')
 const { config } = require('./deploy-config/config')
 const { aliyunConfig } = require('./deploy-config/aliyun.config')
 
-const client = new OSS({
+const aliyun = new OSS({
   region: aliyunConfig.oss.region,
   bucket: aliyunConfig.oss.bucket,
   accessKeyId: aliyunConfig.accessKey.id,
@@ -14,12 +14,14 @@ const client = new OSS({
 const upload = files => {
   co(function* () {
     for (let file of files) {
-      let res = yield client.put(
+      let res = yield aliyun.put(
         file.putPath,
         file.getPath,
         file.hasCache
           ? {
-              headers: { 'Cache-Control': 'no-cache, private' }
+              headers: {
+                'Cache-Control': 'no-cache, private'
+              }
             }
           : {}
       )
