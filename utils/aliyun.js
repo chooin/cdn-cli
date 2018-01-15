@@ -1,5 +1,6 @@
 const OSS = require('ali-oss')
 const aliyunConfig = require('../deploy-config/aliyun.config')
+const log = require('./log')
 
 const aliyun = Object.create(null)
 
@@ -22,7 +23,11 @@ aliyun.upload = function* ({
       ? { headers: { 'Cache-Control': 'no-cache, private' } }
       : {}
   )
-  console.log(`${res.res.status === 200 ? '☘  ' : '❌  '}${hasCache ? '       ' : '[Cache]'}    ${res.name}`)
+  log({
+    status: res.res.status === 200,
+    hasCache,
+    putPath: res.name
+  })
 }
 
 module.exports = aliyun
