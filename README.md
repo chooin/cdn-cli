@@ -39,7 +39,7 @@ AddTrustExternalCARoot.crt
 1. 安装依赖包
 
 ``` sh
-yarn global add cdn-deply-cli # or npm install cdn-deploy-cli -g
+yarn global add cdn-deploy-cli # or npm install cdn-deploy-cli -g
 ```
 
 2. 初始化项目
