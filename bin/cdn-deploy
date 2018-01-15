@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const program = require('commander')
+const chalk = require('chalk')
+const fs = require('fs')
+const path = require('path')
+const {
+  createFile,
+  hasFile
+} = require('../utils/file')
+
+program
+  .version('0.0.1')
+
+program
+  .command('init')
+  .description(chalk.gray('Init'))
+  .action(() => {
+    hasFile({
+      to: `./deploy-config`
+    }).then(() => {
+      fs.readdirSync(path.resolve(__dirname, '../templates')).forEach(file => {
+        createFile({
+          from: path.resolve(__dirname, `../templates/${file}`),
+          to: `./deploy-config/${file}`,
+          replaceKey: 'aliyun'
+        })
+      })
+    }).catch(() => {
+      console.log('Cancelled')
+    })
+  })
+
+program.on('--help', () => {
+    console.log()
+    console.log('  Examples:')
+    console.log()
+    console.log('    $ cdn-deploy --help')
+    console.log('    $ cdn-deploy -h')
+  })
+
+program.parse(process.argv)

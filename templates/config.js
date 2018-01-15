@@ -1,5 +1,5 @@
 module.exports = {
-  type: 'aliyun',
+  type: '[replace]',
   deploy: {
     dirs: ['./src'], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
     files: [] // 上传以下文件，如：index.html，`->` 重命名文件
