@@ -3,5 +3,5 @@ module.exports = ({
   hasCache,
   putPath
 }) => {
-  console.log(`${status ? '☘  ' : '❌  '}${hasCache ? '[No-cache]' : '          '}    ${putPath}`)
+  console.log(`${status ? '☘  ' : '❌  '}${hasCache ? '[No-cache]' : '          '} ${putPath}`)
 }
