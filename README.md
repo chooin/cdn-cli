@@ -91,6 +91,14 @@ deploy-config/config.json
 cdn-deploy deploy
 ```
 
+5. 不将 config 文件提交到 git
+
+在项目添加 .gitignore 添加下面内容
+
+``` gitignore
+deploy-config/*.config.json
+```
+
 ## 让项目支持支持https
 
 1. 如何获得 SSL 证书
