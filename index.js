@@ -7,14 +7,11 @@ const upload = files => {
   co(function* () {
     for (let file of files) {
       if (config.type === 'aliyun') {
-        let res = yield aliyun.put(
-          file.putPath,
-          file.getPath,
-          file.hasCache
-            ? { headers: { 'Cache-Control': 'no-cache, private' } }
-            : {}
-        )
-        console.log(`${res.res.status === 200 ? '☘  ' : '❌  '}${file.hasCache ? '       ' : '[Cache]'}    ${res.name}`)
+        yield aliyun.upload({
+          putPath: file.putPath,
+          getPath: file.getPath,
+          hasCache: file.hasCache
+        })
       }
     }
   }).catch(_ => console.log(_))
