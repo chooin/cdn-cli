@@ -1,31 +1,21 @@
 const co = require('co')
-const OSS = require('ali-oss')
 const walk = require('walk')
-const { config } = require('./deploy-config/config')
-const { aliyunConfig } = require('./deploy-config/aliyun.config')
-
-const aliyun = new OSS({
-  region: aliyunConfig.oss.region,
-  bucket: aliyunConfig.oss.bucket,
-  accessKeyId: aliyunConfig.accessKey.id,
-  accessKeySecret: aliyunConfig.accessKey.secret
-})
+const config = require('./deploy-config/config')
+const aliyun = require('./utils/aliyun')
 
 const upload = files => {
   co(function* () {
     for (let file of files) {
-      let res = yield aliyun.put(
-        file.putPath,
-        file.getPath,
-        file.hasCache
-          ? {
-              headers: {
-                'Cache-Control': 'no-cache, private'
-              }
-            }
-          : {}
-      )
-      console.log(`${res.res.status === 200 ? '☘  ' : '❌  '}${file.hasCache ? '       ' : '[Cache]'}    ${res.name}`)
+      if (config.type === 'aliyun') {
+        let res = yield aliyun.put(
+          file.putPath,
+          file.getPath,
+          file.hasCache
+            ? { headers: { 'Cache-Control': 'no-cache, private' } }
+            : {}
+        )
+        console.log(`${res.res.status === 200 ? '☘  ' : '❌  '}${file.hasCache ? '       ' : '[Cache]'}    ${res.name}`)
+      }
     }
   }).catch(_ => console.log(_))
 }
