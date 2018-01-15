@@ -15,7 +15,7 @@ const uploadLog = ({
 
 const config = {
   deploy: {
-    dirs: ['./node_modules'], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
+    dirs: [], // 上传以下文件夹里面的内容，如：./dist，`->` 重命名文件夹
     files: [] // 上传以下文件，如：index.html，`->` 重命名文件
   },
   OSS: {
@@ -39,12 +39,12 @@ const config = {
   }
 }
 
-// const client = new OSS({
-//   region: config.OSS.region,
-//   bucket: config.OSS.bucket,
-//   accessKeyId: config.accessKey.id,
-//   accessKeySecret: config.accessKey.secret
-// })
+const client = new OSS({
+  region: config.OSS.region,
+  bucket: config.OSS.bucket,
+  accessKeyId: config.accessKey.id,
+  accessKeySecret: config.accessKey.secret
+})
 
 const upload = files => {
   co(function* () {
@@ -71,6 +71,8 @@ const upload = files => {
 (() => {
   let walker  = walk.walk('.', { followLinks: false })
   let files = []
+
+  // <!-- 文件夹上传
   let getDirs = []
   let putDirs = []
   config.deploy.dirs.map(d => {
@@ -85,15 +87,18 @@ const upload = files => {
     for (let i in getDirs) {
       if (root.indexOf(getDirs[i]) === 0) {
         let fileSuffix = stat.name.split('.').pop().toLowerCase()
-        let fileName = `${stat.name}`.substring(1).split('/').pop()
+        let getPath = `${root}/${stat.name}`
+        let putPath = `${root.replace(putDirs[i].s, putDirs[i].e)}/${stat.name}`.substring(1)
         let file = {
-          getPath: `${root}/${stat.name}`,
-          putPath: `${root.replace(putDirs[i].s, putDirs[i].e)}/${stat.name}`.substring(1),
-          hasCache: config.noCache.fileSuffix.find(suffix => suffix === fileSuffix) && config.noCache.fileName.find(name => fileName.indexOf(name) > -1) ? true : false
+          getPath,
+          putPath,
+          hasCache: config.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || config.noCache.fileName.find(name => putPath.split('/').pop().indexOf(name) > -1)
+                    ? true
+                    : false
         }
         if (
-          config.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) &&
-          config.lastUpload.fileName.find(name => fileName.indexOf(name) > -1)
+          config.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) ||
+          config.lastUpload.fileName.find(name => putPath.split('/').pop().indexOf(name) > -1)
         ) {
           files.push(file)
         } else {
@@ -103,6 +108,9 @@ const upload = files => {
     }
     next()
   })
+  // 文件夹上传 -->
+
+  // <!-- 制定文件上传
   let getFiles = []
   let putFiles = []
   config.deploy.files.map(f => {
@@ -112,23 +120,27 @@ const upload = files => {
   })
   for (let i in getFiles) {
     let fileSuffix = putFiles[i].split('.').pop().toLowerCase()
-    let fileName = putFiles[i].substring(1).split('/').pop()
+    let getPath = getFiles[i]
+    let putPath = putFiles[i].substring(1)
     let file = {
-      getPath: getFiles[i],
-      putPath: putFiles[i].substring(1),
-      hasCache: config.noCache.fileSuffix.find(suffix => suffix === fileSuffix) && config.noCache.fileName.find(name => fileName.indexOf(name) > -1) ? true : false
+      getPath,
+      putPath,
+      hasCache: config.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || config.noCache.fileName.find(name => putPath.indexOf(name) > -1)
+                ? true
+                : false
     }
     if (
-      config.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) &&
-      config.lastUpload.fileName.find(name => fileName.indexOf(name) > -1)
+      config.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) ||
+      config.lastUpload.fileName.find(name => putPath.split('/').pop().indexOf(name) > -1)
     ) {
       files.push(file)
     } else {
       files.unshift(file)
     }
   }
+  // 制定文件上传 -->
+
   walker.on('end', () => {
-    console.log(files)
-    // upload(files)
+    upload(files)
   })
 })()
