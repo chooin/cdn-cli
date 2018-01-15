@@ -1,0 +1,15 @@
+{
+  "type": "[replace]",
+  "deploy": {
+    "dirs": ["./dist->."],
+    "files": []
+  },
+  "noCache": {
+    "fileSuffix": ["html"],
+    "fileName": ["service-worker.js"]
+  },
+  "lastUpload": {
+    "fileSuffix": ["html"],
+    "fileName": []
+  }
+}

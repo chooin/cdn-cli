@@ -1,7 +1,8 @@
 const co = require('co')
 const walk = require('walk')
-const config = require('./deploy-config/config')
+const fs = require('fs')
 const aliyun = require('./utils/aliyun')
+const config = JSON.parse(fs.readFileSync('./deploy-config/config.json', 'utf8'))
 
 const upload = files => {
   co(function* () {
