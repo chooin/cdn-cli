@@ -1,0 +1,33 @@
+{
+  "name": "cdn-deply-cli",
+  "version": "1.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chooin/cdn-deploy-cli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chooin/cdn-deploy-cli/issues"
+  },
+  "bin": {
+    "cdn-deploy": "bin/cdn-deploy"
+  },
+  "homepage": "https://github.com/Chooin/cdn-deploy-cli#readme",
+  "dependencies": {
+    "ali-oss": "^4.11.4",
+    "chalk": "^2.3.0",
+    "co": "^4.6.0",
+    "commander": "^2.13.0",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.0.0",
+    "shelljs": "^0.8.0",
+    "walk": "^2.3.9"
+  }
+}
