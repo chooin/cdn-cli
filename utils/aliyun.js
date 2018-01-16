@@ -3,7 +3,7 @@ const log = require('./log')
 const fs = require('fs')
 
 const aliyun = Object.create(null)
-const aliyunConfig = JSON.parse(fs.readFileSync('./deploy-config/aliyun.config.json', 'utf8'))
+const aliyunConfig = JSON.parse(fs.readFileSync(`./deploy-config/aliyun/${process.env.DEPLOY_ENV}.json`, 'utf8'))
 
 const oss = new OSS({
   region: aliyunConfig.oss.region,

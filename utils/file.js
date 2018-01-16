@@ -11,13 +11,17 @@ module.exports.createFile = ({
 }) => {
   fse.copy(from, to).then(() => {
     fs.readFile(to, 'utf8', (err, data) => {
-      fs.writeFile(to, data.split(`[replace]`).join(replaceKey), 'utf8', err => {
-        if (err) {
-          return console.log(err)
-        } else {
-          console.log(chalk.yellow(`[Success]  ${path.resolve(to)}`))
-        }
-      })
+      if (data) {
+        fs.writeFile(to, data.split(`[replace]`).join(replaceKey), 'utf8', err => {
+          if (err) {
+            return console.log(err)
+          } else {
+            console.log(chalk.yellow(`[Success]  ${path.resolve(to)}`))
+          }
+        })
+      } else {
+        console.log(chalk.yellow(`[Success]  ${path.resolve(to)}`))
+      }
     })
   })
 }
