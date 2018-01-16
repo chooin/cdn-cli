@@ -49,8 +49,8 @@ program.on('--help', () => {
     console.log()
     console.log('  Examples:')
     console.log()
-    console.log('    $ cdn-deploy --help')
-    console.log('    $ cdn-deploy -h')
+    console.log('    $ cdn --help')
+    console.log('    $ cdn -h')
   })
 
 program.parse(process.argv)
