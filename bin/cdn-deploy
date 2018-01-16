@@ -14,27 +14,35 @@ program
   .version('1.0.2')
 
 program
-  .command('init')
+  .command('init [name]')
   .description(chalk.gray('Init'))
-  .action(() => {
-    hasFile({
-      to: `./deploy-config`
-    }).then(() => {
-      fs.readdirSync(path.resolve(__dirname, '../templates')).forEach(file => {
+  .action((name, options) => {
+    if (name) {
+      hasFile({
+        to: `./deploy-config/${name}`
+      }).then(() => {
         createFile({
-          from: path.resolve(__dirname, `../templates/${file}`),
-          to: `./deploy-config/${file}`,
-          replaceKey: 'aliyun'
+          from: path.resolve(__dirname, `../templates/config.json`),
+          to: `./deploy-config/config.json`,
+          replaceKey: name
         })
-      })
-    }).catch(() => console.log('Cancelled'))
+        fs.readdirSync(path.resolve(__dirname, `../templates/${name}`)).forEach(file => {
+          createFile({
+            from: path.resolve(__dirname, `../templates/${name}/${file}`),
+            to: `./deploy-config/${name}/${file}`
+          })
+        })
+      }).catch(() => console.log('Cancelled'))
+    } else {
+      console.log('Cancelled')
+    }
   })
 
 program
-  .command('deploy')
+  .command('deploy [environment]')
   .description(chalk.gray('Deploy project'))
-  .action(() => {
-    shell.exec(`node ${path.resolve(__dirname, '../index.js')}`)
+  .action((environment) => {
+    shell.exec(`node_modules/.bin/cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
   })
 
 program.on('--help', () => {
