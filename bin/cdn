@@ -11,7 +11,7 @@ const {
 } = require('../utils/file')
 
 program
-  .version('1.0.2')
+  .version('1.0.3')
 
 program
   .command('init [name]')
@@ -42,7 +42,7 @@ program
   .command('deploy [environment]')
   .description(chalk.gray('Deploy project'))
   .action((environment) => {
-    shell.exec(`node_modules/.bin/cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
+    shell.exec(`node_modules/.bin/cross-env DEPLOY_ENV=${environment || 'development'} node ${path.resolve(__dirname, '../index.js')}`)
   })
 
 program.on('--help', () => {
