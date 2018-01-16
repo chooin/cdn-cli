@@ -1,13 +1,5 @@
 # 使用 Aliyun CDN 部署前端项目
 
-使用 cdn 部署项目的好处:
-
-1. 无带宽上限
-2. 无需租用虚拟主机/虚拟服务器
-3. 无需担心恶意流量攻击
-4. 访问速度快
-5. ...
-
 ### 目录：
 - [创建OSS](#创建OSS)
 - [开通CDN](#开通CDN)
@@ -36,19 +28,19 @@ AddTrustExternalCARoot.crt
 
 ## 项目编译完成后自动上传到OSS
 
-1. 安装依赖包
+##### 1. 安装依赖包
 
 ``` sh
 yarn global add cdn-cli # or npm install cdn-cli -g
 ```
 
-2. 初始化项目
+##### 2. 初始化项目
 
 ``` sh
 cdn init aliyun
 ```
 
-3. 配置
+##### 3. 配置
 
 deploy-config/aliyun/*.json
 
@@ -85,7 +77,7 @@ deploy-config/config.json
 }
 ```
 
-4. 发布项目
+##### 4. 发布项目
 
 ``` sh
 cdn deploy production
@@ -93,7 +85,7 @@ cdn deploy test
 cdn deploy development
 ```
 
-5. 不将 config 文件提交到 git
+##### 5. 不将 config 文件提交到 git
 
 在项目下添加 .gitignore 文件，然后在 .gitignore 文件中添加下面内容
 
