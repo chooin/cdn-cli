@@ -8,9 +8,13 @@
 
 ## 创建OSS
 
-设置默认首页：OSS->选择部署的Bucket->进入Bucket属性->静态网站->配置默认首页(index.html)
+##### 1. 设置默认首页：
 
-绑定域名：OSS->选择部署的Bucket->进入Bucket属性->绑定域名
+OSS->选择部署的Bucket->进入Bucket属性->静态网站->配置默认首页(index.html)
+
+##### 2. 绑定域名：
+
+OSS->选择部署的Bucket->进入Bucket属性->绑定域名
 
 ## 开通CDN
 
@@ -94,8 +98,6 @@ deploy-config/aliyun/
 ```
 
 ## 让项目支持https
-
-1. 如何获得 SSL 证书
 
 阿里云可以申请时长为1年的免费证书
 
