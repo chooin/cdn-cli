@@ -45,7 +45,7 @@ yarn global add cdn-cli # or npm install cdn-cli -g
 2. 初始化项目
 
 ``` sh
-cdn init
+cdn init aliyun
 ```
 
 3. 配置
@@ -88,7 +88,9 @@ deploy-config/config.json
 4. 发布项目
 
 ``` sh
-cdn deploy
+cdn deploy production
+cdn deploy test
+cdn deploy development
 ```
 
 5. 不将 config 文件提交到 git
