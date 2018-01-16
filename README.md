@@ -39,18 +39,18 @@ AddTrustExternalCARoot.crt
 1. 安装依赖包
 
 ``` sh
-yarn global add cdn-deploy-cli # or npm install cdn-deploy-cli -g
+yarn global add cdn-cli # or npm install cdn-cli -g
 ```
 
 2. 初始化项目
 
 ``` sh
-cdn-deploy init
+cdn init
 ```
 
 3. 配置
 
-deploy-config/aliyun.config.json
+deploy-config/aliyun/*.json
 
 ``` json
 {
@@ -88,7 +88,7 @@ deploy-config/config.json
 4. 发布项目
 
 ``` sh
-cdn-deploy deploy
+cdn deploy
 ```
 
 5. 不将 config 文件提交到 git
@@ -96,7 +96,7 @@ cdn-deploy deploy
 在项目下添加 .gitignore 文件，然后在 .gitignore 文件中添加下面内容
 
 ``` gitignore
-deploy-config/*.config.json
+deploy-config/aliyun/
 ```
 
 ## 让项目支持https
