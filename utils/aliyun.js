@@ -3,13 +3,19 @@ const log = require('./log')
 const fs = require('fs')
 
 const aliyun = Object.create(null)
-const aliyunConfig = JSON.parse(fs.readFileSync(`./deploy-config/aliyun/${process.env.DEPLOY_ENV}.json`, 'utf8'))
+let config
+
+try {
+  config = JSON.parse(fs.readFileSync(`./deploy-config/aliyun/${process.env.DEPLOY_ENV}.json`, 'utf8'))
+} catch (e) {
+  throw `解析配置文件出错`
+}
 
 const oss = new OSS({
-  region: aliyunConfig.oss.region,
-  bucket: aliyunConfig.oss.bucket,
-  accessKeyId: aliyunConfig.accessKey.id,
-  accessKeySecret: aliyunConfig.accessKey.secret
+  region: config.oss.region,
+  bucket: config.oss.bucket,
+  accessKeyId: config.accessKey.id,
+  accessKeySecret: config.accessKey.secret
 })
 
 aliyun.upload = function* ({

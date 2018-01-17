@@ -2,7 +2,13 @@ const co = require('co')
 const walk = require('walk')
 const fs = require('fs')
 const aliyun = require('./utils/aliyun')
-const config = JSON.parse(fs.readFileSync('./deploy-config/config.json', 'utf8'))
+let config
+
+try {
+  config = JSON.parse(fs.readFileSync('./deploy-config/config.json', 'utf8'))
+} catch (e) {
+  throw `解析配置文件出错`
+}
 
 const upload = files => {
   co(function* () {
