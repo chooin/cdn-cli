@@ -1,5 +1,7 @@
 # 使用 Aliyun CDN 部署前端项目
 
+[![npm package](https://img.shields.io/npm/v/cnd-cli.svg)](https://www.npmjs.org/package/cnd-cli)
+
 ### 目录：
 - [创建OSS](#创建OSS)
 - [开通CDN](#开通CDN)
