@@ -67,10 +67,10 @@ deploy-config/config.json
 
 ``` json
 {
-  "type": "aliyun",
-  "deploy": {
-    "dirs": ["./dist->."],
-    "files": []
+  "type": "aliyun", // 阿里云
+  "deploy": {
+    "dirs": ["./dist->.", "./config"],
+    "files": ["./example.html->./index.html", "about.html"]
   },
   "noCache": {
     "fileSuffix": ["html"],
@@ -82,6 +82,7 @@ deploy-config/config.json
   }
 }
 ```
+注：“->” 用于更改上传目录或重新命名上传文件
 
 ##### 4. 发布项目
 
