@@ -67,10 +67,10 @@ deploy-config/config.json
 
 ``` json
 {
-  "type": "aliyun", // 阿里云
-  "deploy": {
-    "dirs": ["./dist->.", "./config"],
-    "files": ["./example.html->./index.html", "about.html"]
+  "type": "aliyun",
+  "deploy": {
+    "dirs": ["./dist->.", "./config"],
+    "files": ["./example.html->./index.html", "about.html"]
   },
   "noCache": {
     "fileSuffix": ["html"],
