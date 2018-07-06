@@ -1,7 +1,12 @@
 {
   "type": "[type]",
   "deploy": {
-    "dirs": ["./dist->."],
+    "dirs": [
+      {
+        "from": "./dist",
+        "to": "."
+      }
+    ],
     "files": []
   },
   "noCache": {

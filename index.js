@@ -68,12 +68,19 @@ config().then(res => {
     // <!-- 文件夹上传
     let getDirs = []
     let putDirs = []
-    CONFIG.deploy.dirs.map(d => {
-      let s = d.split('->')
-      getDirs.push(s[0])
+    CONFIG.deploy.dirs.map(dir => {
+      let from
+      let to
+      if (typeof dir === 'string') {
+        to = from = dir
+      } else {
+        from = dir.from
+        to = dir.to
+      }
+      getDirs.push(from)
       putDirs.push({
-        s: s[0],
-        e: s[1] || s[0]
+        from,
+        to
       })
     })
     walker.on('file', (root, stat, next) => {
@@ -81,7 +88,7 @@ config().then(res => {
         if (root.indexOf(getDirs[i]) === 0) {
           let fileSuffix = stat.name.split('.').pop().toLowerCase()
           let getPath = `${root}/${stat.name}`
-          let putPath = `${root.replace(putDirs[i].s, putDirs[i].e)}/${stat.name}`.substring(1)
+          let putPath = `${root.replace(putDirs[i].from, putDirs[i].to)}/${stat.name}`.substring(1)
           let file = {
             getPath,
             putPath,
@@ -109,10 +116,17 @@ config().then(res => {
     // <!-- 制定文件上传
     let getFiles = []
     let putFiles = []
-    CONFIG.deploy.files.map(f => {
-      let s = f.split('->')
-      getFiles.push(s[0])
-      putFiles.push(s[1] || s[0])
+    CONFIG.deploy.files.map(file => {
+      let from
+      let to
+      if (typeof file === 'string') {
+        to = from = file
+      } else {
+        from = file.from
+        to = file.to
+      }
+      getFiles.push(from)
+      putFiles.push(to)
     })
     for (let i in getFiles) {
       let fileSuffix = putFiles[i].split('.').pop().toLowerCase()
