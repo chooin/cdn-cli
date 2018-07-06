@@ -45,7 +45,7 @@ config().then(res => {
     fileName,
     fileSuffix
   }) => {
-    return CONFIG.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.lastUpload.fileName.find(name => fileName.indexOf(name) > -1)
+    return CONFIG.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.lastUpload.files.find(file => fileName.indexOf(file) > -1)
       ? true
       : false
   }
@@ -54,7 +54,7 @@ config().then(res => {
     fileName,
     fileSuffix
   }) => {
-    return CONFIG.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.noCache.fileName.find(name => fileName.indexOf(name) > -1)
+    return CONFIG.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.noCache.files.find(file => fileName.indexOf(file) > -1)
       ? true
       : false
   }

@@ -10,11 +10,11 @@
 
 ## 创建OSS
 
-##### 1. 设置默认首页：
+#### 1. 设置默认首页：
 
 OSS->选择部署的Bucket->进入Bucket属性->静态网站->配置默认首页(index.html)
 
-##### 2. 绑定域名：
+#### 2. 绑定域名：
 
 OSS->选择部署的Bucket->进入Bucket属性->绑定域名
 
@@ -34,34 +34,20 @@ AddTrustExternalCARoot.crt
 
 ## 项目编译完成后自动上传到OSS
 
-##### 1. 安装依赖包
+#### 1. 安装依赖包
 
-``` sh
-yarn global add cdn-cli # or npm install cdn-cli -g
+```sh
+npm install cdn-cli -g
 ```
 
-##### 2. 初始化项目
+#### 2. 初始化项目
 
-``` sh
-cdn init aliyun
+```sh
+cdn init aliyun # 阿里云
+cdn init qiniu # 七牛云
 ```
 
-##### 3. 配置
-
-deploy-config/aliyun/*.json
-
-``` json
-{
-  "oss": {
-    "region": "oss-cn-hangzhou",
-    "bucket": "your project"
-  },
-  "accessKey": {
-    "id": "",
-    "secret": ""
-  }
-}
-```
+#### 3. 配置
 
 deploy-config/config.json
 
@@ -69,22 +55,46 @@ deploy-config/config.json
 {
   "type": "aliyun",
   "deploy": {
-    "dirs": ["./dist->.", "./config"],
-    "files": ["./example.html->./index.html", "about.html"]
+    "directories": [
+      {
+        "from": "./dist",
+        "to": "."
+      },
+      "./static" 
+    ],
+    "files": [
+      {
+        "from": "./product.html",
+        "to": "./item.html"
+      },
+      "./login.html"
+    ]
   },
   "noCache": {
-    "fileSuffix": ["html"],
-    "fileName": ["service-worker.js"]
+    "fileSuffix": [
+      "html"
+    ],
+    "file": [
+      "service-worker.js"
+    ]
   },
   "lastUpload": {
-    "fileSuffix": ["html"],
-    "fileName": []
+    "fileSuffix": [
+      "html"
+    ],
+    "file": []
   }
 }
 ```
-注：“->” 用于更改上传目录或重新命名上传文件
 
-##### 4. 发布项目
+##### 解释：
+
+- 将代码部署到阿里云
+- 将 `./dist` 目录里面的文件放到 `.` 目录下，将 `./static` 里面的文件放到 `./static` 目录下
+- 上传 `./product.html` 到 `./item.html`，上传 `./login.html` 到 `./login.html`
+- 不缓存后缀为 `html` 的文件，不缓存 `service-worker.js` 文件；后缀为 `html` 的文件最后上传
+
+#### 4. 发布项目
 
 ``` sh
 cdn deploy production
@@ -92,7 +102,7 @@ cdn deploy test
 cdn deploy development
 ```
 
-##### 5. 不将 config 文件提交到 git
+#### 5. 不将 config 文件提交到 git
 
 在项目下添加 .gitignore 文件，然后在 .gitignore 文件中添加下面内容
 
@@ -105,3 +115,5 @@ deploy-config/aliyun/
 阿里云可以申请时长为1年的免费证书
 
 我一般去这里购买 https://www.ssls.com
+
+
