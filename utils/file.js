@@ -57,9 +57,7 @@ module.exports.hasFile = ({
         } else {
           reject()
         }
-      }).catch(_ => {
-        console.log(_)
-      })
+      }).catch(console.log)
     } else {
       resolve()
     }

@@ -45,7 +45,7 @@ program
   .description(chalk.gray('Deploy project'))
   .action((environment) => {
     environment = environment || 'development'
-    shell.exec(`node_modules/.bin/cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
+    shell.exec(`cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
   })
 
 program.on('--help', () => {

@@ -21,9 +21,7 @@ const env = () => {
       } catch (e) {
         reject(new Error('解析配置文件出错'))
       }
-    }).catch(_ => {
-      reject(_.message)
-    })
+    }).catch(_ => reject(_.message))
   })
 }
 
