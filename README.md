@@ -60,7 +60,7 @@ deploy-config/config.json
         "from": "./dist",
         "to": "."
       },
-      "./static" 
+      "./static"
     ],
     "files": [
       {
@@ -74,7 +74,7 @@ deploy-config/config.json
     "fileSuffix": [
       "html"
     ],
-    "file": [
+    "files": [
       "service-worker.js"
     ]
   },
@@ -82,7 +82,7 @@ deploy-config/config.json
     "fileSuffix": [
       "html"
     ],
-    "file": []
+    "files": []
   }
 }
 ```
