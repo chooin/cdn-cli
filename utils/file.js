@@ -7,20 +7,35 @@ const inquirer = require('inquirer')
 module.exports.createFile = ({
   from,
   to,
-  replaceKey = ''
+  replace = [],
+  tip = true
 }) => {
   fse.copy(from, to).then(() => {
     fs.readFile(to, 'utf8', (err, data) => {
       if (data) {
-        fs.writeFile(to, data.split(`[replace]`).join(replaceKey), 'utf8', err => {
+        for (let i in replace) {
+          data = data.replace(
+            new RegExp(`\\[${replace[i].from}\\]`, 'g'),
+            replace[i].to
+          )
+        }
+        fs.writeFile(to, data, 'utf8', err => {
           if (err) {
-            return console.log(err)
+            console.log(`- ${chalk.red(`Failed`)}`)
           } else {
-            console.log(chalk.yellow(`[Success]  ${path.resolve(to)}`))
+            if (tip) {
+              console.log(`- ${chalk.green(`Completed `)}${path.resolve(to)}`)
+            } else {
+              console.log(`- ${chalk.green(`Completed `)}`)
+            }
           }
         })
       } else {
-        console.log(chalk.yellow(`[Success]  ${path.resolve(to)}`))
+        if (tip) {
+          console.log(`- ${chalk.green(`Completed `)}${path.resolve(to)}`)
+        } else {
+          console.log(`- ${chalk.green(`Completed `)}`)
+        }
       }
     })
   })
@@ -42,9 +57,7 @@ module.exports.hasFile = ({
         } else {
           reject()
         }
-      }).catch(_ => {
-        console.log(_)
-      })
+      }).catch(console.log)
     } else {
       resolve()
     }

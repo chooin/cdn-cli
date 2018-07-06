@@ -24,7 +24,9 @@ program
         createFile({
           from: path.resolve(__dirname, `../templates/config.json`),
           to: `./deploy-config/config.json`,
-          replaceKey: name
+          replace: [
+            { from: 'type', to: name }
+          ]
         })
         fs.readdirSync(path.resolve(__dirname, `../templates/${name}`)).forEach(file => {
           createFile({
@@ -41,8 +43,12 @@ program
 program
   .command('deploy [environment]')
   .description(chalk.gray('Deploy project'))
-  .action((environment) => {
-    shell.exec(`node_modules/.bin/cross-env DEPLOY_ENV=${environment || 'development'} node ${path.resolve(__dirname, '../index.js')}`)
+  .action((environment, options) => {
+    environment = environment || 'development'
+    console.log('')
+    console.log(`Deploy environment: ${chalk.yellow(environment)}`)
+    console.log('')
+    shell.exec(`cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
   })
 
 program.on('--help', () => {
