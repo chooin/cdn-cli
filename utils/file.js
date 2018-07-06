@@ -21,7 +21,7 @@ module.exports.createFile = ({
         }
         fs.writeFile(to, data, 'utf8', err => {
           if (err) {
-            console.log(`- ${chalk.red(`Failed`)}`)
+            console.log(`- ${chalk.red(`Failed   `)}`)
           } else {
             if (tip) {
               console.log(`- ${chalk.green(`Completed `)}${path.resolve(to)}`)

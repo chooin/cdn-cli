@@ -11,9 +11,9 @@ module.exports = ({
     status = chalk.red(' - Failed')
   }
   if (hasCache) {
-    hasCache = chalk.yellow('[No-cache]')
+    hasCache = chalk.yellow('[No-cache]    ')
   } else {
-    hasCache = '          '
+    hasCache = '[Cache]       '
   }
   console.log(`${status} ${hasCache} ${putPath}`)
 }

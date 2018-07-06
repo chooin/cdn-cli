@@ -9,6 +9,7 @@ const {
   createFile,
   hasFile
 } = require('../utils/file')
+const index =  require('../index')
 
 program
   .version('1.0.4')
@@ -48,7 +49,8 @@ program
     console.log()
     console.log(`Deploy environment: ${chalk.yellow(environment)}`)
     console.log()
-    shell.exec(`cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
+    process.env.DEPLOY_ENV = environment
+    index()
   })
 
 program.on('--help', () => {
