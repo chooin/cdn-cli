@@ -1,6 +1,7 @@
 const co = require('co')
 const walk = require('walk')
 const chalk = require('chalk')
+const ora = require('ora')
 
 const aliyun = require('./utils/aliyun')
 const qiniu = require('./utils/qiniu')
@@ -61,7 +62,6 @@ module.exports = () => {
     }
 
     (() => {
-      console.log('      Status  Cache Status   Asset')
       let walker  = walk.walk('.', {
         followLinks: false
       })
@@ -155,7 +155,10 @@ module.exports = () => {
       }
       // 制定文件上传 -->
 
+      const spinner = ora('Loading files').start()
       walker.on('end', () => {
+        spinner.stop()
+        console.log(`${'Status'.padStart(12)}   ${'Cache Status'.padStart(12)}   Local Asset -> Remote Asset`)
         upload(files)
       })
     })()

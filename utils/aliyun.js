@@ -30,6 +30,7 @@ module.exports.upload = ({
       )
       log({
         status: res.status === 200,
+        getPath,
         putPath,
         hasCache
       })
