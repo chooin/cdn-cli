@@ -14,6 +14,7 @@ npm install cdn-cli -g
 
 ```sh
 cdn init aliyun # 阿里云
+cdn init tencent # 腾讯云
 cdn init qiniu # 七牛云
 ```
 
@@ -80,17 +81,6 @@ deploy-config/config.json
 }
 ```
 
-七牛云配置 deplot-config/qiniu/
-
-```json
-{
-  "region": "",
-  "bucket": "",
-  "accessKey": "",
-  "secretKey": ""
-}
-```
-
 腾讯云 deplot-config/tencent/
 
 ```json
@@ -102,6 +92,17 @@ deploy-config/config.json
   "secretKey": ""
 }
 
+```
+
+七牛云配置 deplot-config/qiniu/
+
+```json
+{
+  "region": "",
+  "bucket": "",
+  "accessKey": "",
+  "secretKey": ""
+}
 ```
 
 ##### 4. 发布项目
@@ -121,6 +122,7 @@ cdn deploy development
 
 ``` gitignore
 deploy-config/aliyun/
+deploy-config/tencent/
 deploy-config/qiniu/
 ```
 
