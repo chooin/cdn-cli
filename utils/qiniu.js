@@ -1,5 +1,4 @@
-const QINIU = require('qiniu')
-const co = require('co')
+const qiniu = require('qiniu')
 
 const log = require('./log')
 const { env } = require('./config')
@@ -9,7 +8,40 @@ module.exports.upload = ({
   getPath,
   hasCache
 }) => {
-  return env().then(res => {
-    console.log(1)
+  return new Promise(resolve => {
+    env().then(res => {
+      let mac = new qiniu.auth.digest.Mac(res.mac.accessKey, res.mac.secretKey)
+      let options = {
+        scope: `${res.qiniu.bucket}`,
+        expires: 7200
+      }
+      let putPolicy = new qiniu.rs.PutPolicy(options)
+      if (!process.env.QINIU_UPLOAD_TOKEN) process.env.QINIU_UPLOAD_TOKEN = putPolicy.uploadToken(mac)
+      let config = new qiniu.conf.Config()
+      let formUploader = new qiniu.form_up.FormUploader(config)
+      let putExtra = new qiniu.form_up.PutExtra()
+      formUploader.putFile(
+        process.env.QINIU_UPLOAD_TOKEN,
+        putPath.substring(1),
+        getPath,
+        putExtra,
+        (respErr, respBody, respInfo) => {
+          log({
+            status: (respInfo && respInfo.statusCode) === 200,
+            getPath,
+            putPath,
+            hasCache
+          })
+          resolve()
+          // if (respErr) throw respErr
+          // if (respInfo.statusCode == 200) {
+          //   // console.log(respBody)
+          // } else {
+          //   console.log(respInfo.statusCode)
+          //   console.log(respBody)
+          // }
+        }
+      )
+    })
   })
 }

@@ -10,8 +10,7 @@ const {
 } = require('./utils/config')
 
 module.exports = () => {
-  config().then(res => {
-    const CONFIG = res
+  config().then(CONFIG => {
     const upload = files => {
       co(function* () {
         for (let file of files) {

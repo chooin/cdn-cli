@@ -9,30 +9,33 @@ module.exports.upload = ({
   getPath,
   hasCache
 }) => {
-  return env().then(res => {
-    let client = new OSS({
-      region: res.oss.region,
-      bucket: res.oss.bucket,
-      accessKeyId: res.accessKey.id,
-      accessKeySecret: res.accessKey.secret
-    })
-    co(function* () {
-      let { res } = yield client.put(
-        putPath,
-        getPath,
-        hasCache
-          ? {
-              headers: {
-                'Cache-Control': 'no-cache, private'
+  return new Promise(resolve => {
+    env().then(env => {
+      const client = new OSS({
+        region: env.oss.region,
+        bucket: env.oss.bucket,
+        accessKeyId: env.accessKey.id,
+        accessKeySecret: env.accessKey.secret
+      })
+      co(function* () {
+        let { res } = yield client.put(
+          putPath,
+          getPath,
+          hasCache
+            ? {
+                headers: {
+                  'Cache-Control': 'no-cache, private'
+                }
               }
-            }
-          : {}
-      )
-      log({
-        status: res.status === 200,
-        getPath,
-        putPath,
-        hasCache
+            : {}
+        )
+        log({
+          status: res.status === 200,
+          getPath,
+          putPath,
+          hasCache
+        })
+        resolve()
       })
     })
   })

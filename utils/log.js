@@ -8,13 +8,14 @@ module.exports = ({
 }) => {
   if (status) {
     status = ` - ${chalk.green(('Completed').padEnd(9))}`
+    if (hasCache) {
+      hasCache = chalk.yellow('[No-cache]'.padStart(12))
+    } else {
+      hasCache = '[Cache]'.padStart(12)
+    }
   } else {
     status = ` - ${chalk.red('Failed  '.padEnd(9))}`
-  }
-  if (hasCache) {
-    hasCache = chalk.yellow('[No-cache]'.padStart(12))
-  } else {
-    hasCache = '[Cache]'.padStart(12)
+    hasCache = ''.padStart(12)
   }
   if (process.stdout.columns > 160) {
     console.log(`${status}   ${hasCache}   ${getPath} ${chalk.yellow('->')} ${putPath}`)
