@@ -2,6 +2,8 @@
 
 [![npm package](https://img.shields.io/npm/v/cdn-cli.svg)](https://www.npmjs.org/package/cdn-cli)
 
+<img src="https://github.com/Hema-FE/cdn-cli/blob/master/awesome.gif" width="780" height="auto" />
+
 ##### 1. 安装依赖包
 
 ```sh
