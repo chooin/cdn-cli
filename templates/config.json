@@ -25,6 +25,8 @@
   },
   "ignore": {
     "fileSuffix": [],
-    "fileName": []
+    "fileName": [
+      ".DS_Store"
+    ]
   }
 }

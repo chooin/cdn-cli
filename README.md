@@ -1,4 +1,4 @@
-# 对象存储部署前端项目，支持阿里云/七牛云
+# 对象存储部署前端项目，支持阿里云/腾讯云/七牛云
 
 [![npm package](https://img.shields.io/npm/v/cdn-cli.svg)](https://www.npmjs.org/package/cdn-cli)
 
@@ -69,7 +69,7 @@ deploy-config/config.json
 > 4. 不缓存后缀名为 `html` 的文件，不缓存 `service-worker.js` 文件；后缀名为 `html` 的文件最后上传
 > 5. 忽略后缀名为 `map` 的文件
 
-deplot-config/aliyun/
+阿里云 deplot-config/aliyun/
 
 ```json
 {
@@ -80,7 +80,7 @@ deplot-config/aliyun/
 }
 ```
 
-deplot-config/qiniu/
+七牛云配置 deplot-config/qiniu/
 
 ```json
 {
@@ -89,6 +89,19 @@ deplot-config/qiniu/
   "accessKey": "",
   "secretKey": ""
 }
+```
+
+腾讯云 deplot-config/tencent/
+
+```json
+{
+  "region": "",
+  "bucket": "",
+  "appId": "",
+  "secretId": "",
+  "secretKey": ""
+}
+
 ```
 
 ##### 4. 发布项目

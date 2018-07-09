@@ -5,6 +5,7 @@ const ora = require('ora')
 
 const aliyun = require('./utils/aliyun')
 const qiniu = require('./utils/qiniu')
+const tencent = require('./utils/tencent')
 const {
   config
 } = require('./utils/config')
@@ -34,6 +35,14 @@ module.exports = () => {
               }
               case 'qiniu': {
                 yield qiniu.upload({
+                  putPath,
+                  getPath,
+                  hasCache
+                })
+                break
+              }
+              case 'tencent': {
+                yield tencent.upload({
                   putPath,
                   getPath,
                   hasCache

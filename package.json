@@ -1,6 +1,6 @@
 {
   "name": "cdn-cli",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "对象存储部署前端项目，支持阿里云/七牛云",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +24,7 @@
     "chalk": "^2.3.0",
     "co": "^4.6.0",
     "commander": "^2.13.0",
+    "cos-nodejs-sdk-v5": "^2.4.3",
     "fs-extra": "^5.0.0",
     "inquirer": "^5.0.0",
     "ora": "^2.1.0",
