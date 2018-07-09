@@ -7,14 +7,18 @@ module.exports = ({
   putPath
 }) => {
   if (status) {
-    status = chalk.green(('- Completed').padStart(12))
+    status = ` - ${chalk.green(('Completed').padEnd(9))}`
   } else {
-    status = chalk.red('- Failed  '.padStart(12))
+    status = ` - ${chalk.red('Failed  '.padEnd(9))}`
   }
   if (hasCache) {
     hasCache = chalk.yellow('[No-cache]'.padStart(12))
   } else {
     hasCache = '[Cache]'.padStart(12)
   }
-  console.log(`${status}   ${hasCache}   ${getPath} ${chalk.yellow('->')} ${putPath}`)
+  if (process.stdout.columns > 160) {
+    console.log(`${status}   ${hasCache}   ${getPath} ${chalk.yellow('->')} ${putPath}`)
+  } else {
+    console.log(`${status}   ${hasCache}   ${putPath}`)
+  }
 }

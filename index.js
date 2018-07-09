@@ -155,10 +155,18 @@ module.exports = () => {
       }
       // 制定文件上传 -->
 
+      console.log()
+      console.log(`${'Cloud Type:'.padStart(18)} ${chalk.yellow(CONFIG.type)}`)
+      console.log(`${'Environment:'.padStart(18)} ${chalk.yellow(process.env.DEPLOY_ENV)}`)
+      console.log()
       const spinner = ora('Loading files').start()
       walker.on('end', () => {
         spinner.stop()
-        console.log(`${'Status'.padStart(12)}   ${'Cache Status'.padStart(12)}   Local Asset -> Remote Asset`)
+        if (process.stdout.columns > 160) {
+          console.log(`${'Status'.padStart(12)}   ${'Cache Status'.padStart(12)}   Local Asset -> Remote Asset`)
+        } else {
+          console.log(`${'Status'.padStart(12)}   ${'Cache Status'.padStart(12)}   Remote Asset`)
+        }
         upload(files)
       })
     })()

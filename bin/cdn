@@ -45,11 +45,7 @@ program
   .command('deploy [environment]')
   .description(chalk.gray('deploy project'))
   .action((environment, options) => {
-    environment = environment || 'development'
-    console.log()
-    console.log(`Deploy environment: ${chalk.yellow(environment)}`)
-    console.log()
-    process.env.DEPLOY_ENV = environment
+    process.env.DEPLOY_ENV = environment || 'development'
     index()
   })
 
