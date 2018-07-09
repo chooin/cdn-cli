@@ -3,17 +3,23 @@ const chalk = require('chalk')
 module.exports = ({
   status,
   hasCache,
+  getPath,
   putPath
 }) => {
   if (status) {
-    status = chalk.green(' - Completed ')
+    status = ` - ${chalk.green(('Completed').padEnd(9))}`
+    if (hasCache) {
+      hasCache = chalk.yellow('[No-cache]'.padStart(12))
+    } else {
+      hasCache = '[Cache]'.padStart(12)
+    }
   } else {
-    status = chalk.red(' - Failed')
+    status = ` - ${chalk.red('Failed  '.padEnd(9))}`
+    hasCache = ''.padStart(12)
   }
-  if (hasCache) {
-    hasCache = chalk.yellow('[No-cache]')
+  if (process.stdout.columns > 160) {
+    console.log(`${status}   ${hasCache}   ${getPath} ${chalk.yellow('->')} ${putPath}`)
   } else {
-    hasCache = '          '
+    console.log(`${status}   ${hasCache}   ${putPath}`)
   }
-  console.log(`${status} ${hasCache} ${putPath}`)
 }

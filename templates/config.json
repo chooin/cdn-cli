@@ -13,7 +13,7 @@
     "fileSuffix": [
       "html"
     ],
-    "fileName": [
+    "files": [
       "service-worker.js"
     ]
   },
@@ -21,6 +21,6 @@
     "fileSuffix": [
       "html"
     ],
-    "fileName": []
+    "files": []
   }
 }

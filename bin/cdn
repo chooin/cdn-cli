@@ -4,34 +4,35 @@ const program = require('commander')
 const chalk = require('chalk')
 const fs = require('fs')
 const path = require('path')
-const shell = require('shelljs')
+
 const {
   createFile,
   hasFile
 } = require('../utils/file')
+const index =  require('../index')
 
 program
-  .version('1.0.4')
+  .version('2.0.0')
 
 program
-  .command('init [name]')
-  .description(chalk.gray('Init'))
-  .action((name, options) => {
-    if (name) {
+  .command('init [type]')
+  .description(chalk.gray('init aliyun|qiniu'))
+  .action((type, options) => {
+    if (type) {
       hasFile({
-        to: `./deploy-config/${name}`
+        to: `./deploy-config/${type}`
       }).then(() => {
         createFile({
           from: path.resolve(__dirname, `../templates/config.json`),
           to: `./deploy-config/config.json`,
           replace: [
-            { from: 'type', to: name }
+            { from: 'type', to: type }
           ]
         })
-        fs.readdirSync(path.resolve(__dirname, `../templates/${name}`)).forEach(file => {
+        fs.readdirSync(path.resolve(__dirname, `../templates/${type}`)).forEach(file => {
           createFile({
-            from: path.resolve(__dirname, `../templates/${name}/${file}`),
-            to: `./deploy-config/${name}/${file}`
+            from: path.resolve(__dirname, `../templates/${type}/${file}`),
+            to: `./deploy-config/${type}/${file}`
           })
         })
       }).catch(() => console.log('Cancelled'))
@@ -42,21 +43,18 @@ program
 
 program
   .command('deploy [environment]')
-  .description(chalk.gray('Deploy project'))
-  .action((environment, options) => {
-    environment = environment || 'development'
-    console.log('')
-    console.log(`Deploy environment: ${chalk.yellow(environment)}`)
-    console.log('')
-    shell.exec(`cross-env DEPLOY_ENV=${environment} node ${path.resolve(__dirname, '../index.js')}`)
+  .description(chalk.gray('deploy project'))
+  .action((environment) => {
+    process.env.DEPLOY_ENV = environment || 'development'
+    index()
   })
 
 program.on('--help', () => {
     console.log()
     console.log('  Examples:')
     console.log()
-    console.log('    $ cdn --help')
-    console.log('    $ cdn -h')
+    console.log('    $ cdn init aliyun')
+    console.log('    $ cdn deploy development')
   })
 
 program.parse(process.argv)
