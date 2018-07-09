@@ -12,10 +12,10 @@ module.exports.upload = ({
   return new Promise(resolve => {
     env().then(env => {
       const client = new OSS({
-        region: env.oss.region,
-        bucket: env.oss.bucket,
-        accessKeyId: env.accessKey.id,
-        accessKeySecret: env.accessKey.secret
+        region: env.region,
+        bucket: env.bucket,
+        accessKeyId: env.accessKeyId,
+        accessKeySecret: env.accessKeySecret
       })
       co(function* () {
         let { res } = yield client.put(

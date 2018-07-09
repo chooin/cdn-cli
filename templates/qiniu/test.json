@@ -1,10 +1,6 @@
 {
-  "qiniu": {
-    "region": "",
-    "bucket": ""
-  },
-  "mac": {
-    "accessKey": "",
-    "secretKey": ""
-  }
+  "region": "",
+  "bucket": "",
+  "accessKey": "",
+  "secretKey": ""
 }

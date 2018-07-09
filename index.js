@@ -17,25 +17,29 @@ module.exports = () => {
           let {
             putPath,
             getPath,
-            hasCache
+            hasCache,
+            ignore
           } = file
-
-          switch (CONFIG.type) {
-            case 'aliyun': {
-              yield aliyun.upload({
-                putPath,
-                getPath,
-                hasCache
-              })
-              break
-            }
-            case 'qiniu': {
-              yield qiniu.upload({
-                putPath,
-                getPath,
-                hasCache
-              })
-              break
+          if (ignore) {
+            // 忽略文件
+          } else {
+            switch (CONFIG.type) {
+              case 'aliyun': {
+                yield aliyun.upload({
+                  putPath,
+                  getPath,
+                  hasCache
+                })
+                break
+              }
+              case 'qiniu': {
+                yield qiniu.upload({
+                  putPath,
+                  getPath,
+                  hasCache
+                })
+                break
+              }
             }
           }
         }
@@ -46,7 +50,7 @@ module.exports = () => {
       fileName,
       fileSuffix
     }) => {
-      return CONFIG.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.lastUpload.files.find(file => fileName.indexOf(file) > -1)
+      return CONFIG.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.lastUpload.fileName.find(file => fileName.indexOf(file) > -1)
         ? true
         : false
     }
@@ -55,7 +59,16 @@ module.exports = () => {
       fileName,
       fileSuffix
     }) => {
-      return CONFIG.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.noCache.files.find(file => fileName.indexOf(file) > -1)
+      return CONFIG.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.noCache.fileName.find(file => fileName.indexOf(file) > -1)
+        ? true
+        : false
+    }
+
+    const isIgnore = ({
+      fileName,
+      fileSuffix
+    }) => {
+      return CONFIG.ignore.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.ignore.fileName.find(file => fileName.indexOf(file) > -1)
         ? true
         : false
     }
@@ -94,6 +107,10 @@ module.exports = () => {
               getPath,
               putPath,
               hasCache: hasCache({
+                fileName: putPath.split('/').pop(),
+                fileSuffix
+              }),
+              ignore: isIgnore({
                 fileName: putPath.split('/').pop(),
                 fileSuffix
               })

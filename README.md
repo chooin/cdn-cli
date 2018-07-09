@@ -1,38 +1,6 @@
-# 使用 Aliyun CDN 部署前端项目
+# 对象存储部署前端项目，支持阿里云/七牛
 
 [![npm package](https://img.shields.io/npm/v/cdn-cli.svg)](https://www.npmjs.org/package/cdn-cli)
-
-### 目录：
-- [创建OSS](#创建OSS)
-- [开通CDN](#开通CDN)
-- [项目编译完成后自动上传到OSS](#项目编译完成后自动上传到OSS)
-- [让项目支持https](#让项目支持https)
-
-## 创建OSS
-
-#### 1. 设置默认首页：
-
-OSS->选择部署的Bucket->进入Bucket属性->静态网站->配置默认首页(index.html)
-
-#### 2. 绑定域名：
-
-OSS->选择部署的Bucket->进入Bucket属性->绑定域名
-
-## 开通CDN
-
-https: CDN->CDN域名列表->管理->HTTPS安全加速->配置ssl信息->将CNAME修改成CDN的
-
-SSL 证书拼接顺序
-
-www.example.cn.crt
-
-COMODORSADomainValidationSecureServerCA.crt
-
-COMODORSAAddTrustCA.crt
-
-AddTrustExternalCARoot.crt
-
-## 项目编译完成后自动上传到OSS
 
 #### 1. 安装依赖包
 
@@ -74,7 +42,7 @@ deploy-config/config.json
     "fileSuffix": [
       "html"
     ],
-    "files": [
+    "fileName": [
       "service-worker.js"
     ]
   },
@@ -82,8 +50,36 @@ deploy-config/config.json
     "fileSuffix": [
       "html"
     ],
-    "files": []
+    "fileName": []
+  },
+  "ignore": {
+    "fileSuffix": [
+      "map"
+    ],
+    "fileName": []
   }
+}
+```
+
+deplot-config/aliyun
+
+```json
+{
+  "region": "",
+  "bucket": "",
+  "accessKeyId": "",
+  "accessKeySecret": ""
+}
+```
+
+deplot-config/qiniu
+
+```json
+{
+  "region": "",
+  "bucket": "",
+  "accessKey": "",
+  "secretKey": ""
 }
 ```
 
@@ -92,7 +88,8 @@ deploy-config/config.json
 - 将代码部署到阿里云
 - 将 `./dist` 目录里面的文件放到 `.` 目录下，将 `./static` 里面的文件放到 `./static` 目录下
 - 上传 `./product.html` 到 `./item.html`，上传 `./login.html` 到 `./login.html`
-- 不缓存后缀为 `html` 的文件，不缓存 `service-worker.js` 文件；后缀为 `html` 的文件最后上传
+- 不缓存后缀名为 `html` 的文件，不缓存 `service-worker.js` 文件；后缀名为 `html` 的文件最后上传
+- 忽略后缀名为 `map` 的文件
 
 #### 4. 发布项目
 
@@ -100,6 +97,7 @@ deploy-config/config.json
 cdn deploy production
 cdn deploy test
 cdn deploy development
+...
 ```
 
 #### 5. 不将 config 文件提交到 git
@@ -108,12 +106,7 @@ cdn deploy development
 
 ``` gitignore
 deploy-config/aliyun/
+deploy-config/qiniu/
 ```
-
-## 让项目支持https
-
-阿里云可以申请时长为1年的免费证书
-
-我一般去这里购买 https://www.ssls.com
 
 

@@ -9,10 +9,10 @@ module.exports.upload = ({
   hasCache
 }) => {
   return new Promise(resolve => {
-    env().then(res => {
-      let mac = new qiniu.auth.digest.Mac(res.mac.accessKey, res.mac.secretKey)
+    env().then(env => {
+      let mac = new qiniu.auth.digest.Mac(env.accessKey, env.secretKey)
       let options = {
-        scope: `${res.qiniu.bucket}`,
+        scope: `${env.bucket}`,
         expires: 7200
       }
       let putPolicy = new qiniu.rs.PutPolicy(options)
@@ -37,8 +37,8 @@ module.exports.upload = ({
           // if (respInfo.statusCode == 200) {
           //   // console.log(respBody)
           // } else {
-          //   console.log(respInfo.statusCode)
-          //   console.log(respBody)
+            // console.log(respInfo.statusCode)
+            // console.log(respBody)
           // }
         }
       )

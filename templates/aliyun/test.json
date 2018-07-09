@@ -1,10 +1,6 @@
 {
-  "oss": {
-    "region": "",
-    "bucket": ""
-  },
-  "accessKey": {
-    "id": "",
-    "secret": ""
-  }
+  "region": "",
+  "bucket": "",
+  "accessKeyId": "",
+  "accessKeySecret": ""
 }
