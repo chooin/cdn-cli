@@ -21,34 +21,34 @@ module.exports.createFile = ({
         }
         fs.writeFile(to, data, 'utf8', err => {
           if (err) {
-            console.log(`- ${chalk.red(`Failed   `)}`)
+            console.log(`- ${chalk.red(`失败 `)}`)
           } else {
             if (tip) {
-              console.log(`- ${chalk.green(`Completed `)}${path.resolve(to)}`)
+              console.log(`- ${chalk.green(`完成 `)}${path.resolve(to)}`)
             } else {
-              console.log(`- ${chalk.green(`Completed `)}`)
+              console.log(`- ${chalk.green(`完成 `)}`)
             }
           }
         })
       } else {
         if (tip) {
-          console.log(`- ${chalk.green(`Completed `)}${path.resolve(to)}`)
+          console.log(`- ${chalk.green(`完成 `)}${path.resolve(to)}`)
         } else {
-          console.log(`- ${chalk.green(`Completed `)}`)
+          console.log(`- ${chalk.green(`完成 `)}`)
         }
       }
     })
   })
 }
 
-module.exports.hasFile = ({
+module.exports.canCreateFile = ({
   to
 }) => {
   return new Promise((resolve, reject) => {
     if (fs.existsSync(path.resolve(to))) {
       inquirer.prompt([{
         type: 'confirm',
-        message: 'Target file exists. Continue?',
+        message: '文件已存在，继续？',
         name: 'ok',
         default: false
       }]).then(answers => {

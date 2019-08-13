@@ -4,22 +4,31 @@ const program = require('commander')
 const chalk = require('chalk')
 const fs = require('fs')
 const path = require('path')
+const dayjs = require('dayjs')
 
 const {
   createFile,
-  hasFile
+  canCreateFile
 } = require('../utils/file')
 const index =  require('../index')
+const support = [
+  'aliyun',
+  'tencent',
+  'qiniu'
+]
 
 program
-  .version('2.0.2')
+  .version('3.0.0')
+  .option('-t, --tag [tag]', '')
 
 program
   .command('init [type]')
-  .description(chalk.gray('init aliyun|qiniu'))
-  .action((type, options) => {
-    if (type) {
-      hasFile({
+  .description(chalk.gray(`init ${support.join('|')}`))
+  .action(type => {
+    if (
+      support.includes(type)
+    ) {
+      canCreateFile({
         to: `./deploy-config/${type}`
       }).then(() => {
         createFile({
@@ -29,24 +38,38 @@ program
             { from: 'type', to: type }
           ]
         })
-        fs.readdirSync(path.resolve(__dirname, `../templates/${type}`)).forEach(file => {
-          createFile({
-            from: path.resolve(__dirname, `../templates/${type}/${file}`),
-            to: `./deploy-config/${type}/${file}`
+        fs
+          .readdirSync(path.resolve(__dirname, `../templates/${type}`))
+          .forEach(file => {
+            createFile({
+              from: path.resolve(__dirname, `../templates/${type}/${file}`),
+              to: `./deploy-config/${type}/${file}`
+            })
           })
-        })
-      }).catch(() => console.log('Cancelled'))
+      }).catch(() => console.log('已取消'))
     } else {
-      console.log('Cancelled')
+      console.log('已取消')
     }
   })
 
 program
   .command('deploy [environment]')
   .description(chalk.gray('deploy project'))
-  .action((environment) => {
+  .action(environment => {
     process.env.DEPLOY_ENV = environment || 'development'
     index()
+    if (program.tag) {
+      let tag = `tag: ${program.tag} 操作时间: ${dayjs().format('YYYY-MM-DD hh:mm:ss')}\n`
+      let to = path.resolve('./cdn-cli.log')
+      if (fs.existsSync(to)) {
+        fs.readFile(to, 'utf8', (err, data) => {
+          if (err) {}
+          fs.writeFile(to, `${tag}${data}`, 'utf8', () => {})
+        })
+      } else {
+        fs.writeFile(to, tag, 'utf8', () => {})
+      }
+    }
   })
 
 program.on('--help', () => {

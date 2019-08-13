@@ -6,20 +6,12 @@ module.exports = ({
   getPath,
   putPath
 }) => {
-  if (status) {
-    status = ` - ${chalk.green(('Completed').padEnd(9))}`
-    if (hasCache) {
-      hasCache = chalk.yellow('[No-cache]'.padStart(12))
-    } else {
-      hasCache = '[Cache]'.padStart(12)
-    }
-  } else {
-    status = ` - ${chalk.red('Failed  '.padEnd(9))}`
-    hasCache = ''.padStart(12)
-  }
+  status = status ? ` - ${chalk.green(('[成功]').padEnd(16))}` : ` - ${chalk.red('[失败]'.padEnd(16))}`
+  hasCache = hasCache ? chalk.yellow('[不支持]'.padEnd(14)) : '[支持]'.padEnd(15)
+
   if (process.stdout.columns > 160) {
-    console.log(`${status}   ${hasCache}   ${getPath} ${chalk.yellow('->')} ${putPath}`)
+    console.log(`${status}${hasCache}${getPath}${chalk.yellow(' -> ')}${putPath}`)
   } else {
-    console.log(`${status}   ${hasCache}   ${putPath}`)
+    console.log(`${status}${hasCache}${putPath}`)
   }
 }

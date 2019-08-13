@@ -1,5 +1,4 @@
 const COS = require('cos-nodejs-sdk-v5')
-const co = require('co')
 const fs = require('fs')
 
 const log = require('./log')

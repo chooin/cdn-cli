@@ -1,4 +1,3 @@
-const co = require('co')
 const walk = require('walk')
 const chalk = require('chalk')
 const ora = require('ora')
@@ -12,54 +11,52 @@ const {
 
 module.exports = () => {
   config().then(CONFIG => {
-    const upload = files => {
-      co(function* () {
-        for (let file of files) {
-          let {
-            putPath,
-            getPath,
-            hasCache,
-            ignore
-          } = file
-          if (ignore) {
-            // 忽略文件
-          } else {
-            switch (CONFIG.type) {
-              case 'aliyun': {
-                yield aliyun.upload({
-                  putPath,
-                  getPath,
-                  hasCache
-                })
-                break
-              }
-              case 'qiniu': {
-                yield qiniu.upload({
-                  putPath,
-                  getPath,
-                  hasCache
-                })
-                break
-              }
-              case 'tencent': {
-                yield tencent.upload({
-                  putPath,
-                  getPath,
-                  hasCache
-                })
-                break
-              }
+    const upload = async (files) => {
+      for (let file of files) {
+        let {
+          putPath,
+          getPath,
+          hasCache,
+          ignore
+        } = file
+        if (ignore) {
+          // 忽略文件
+        } else {
+          switch (CONFIG.type) {
+            case 'aliyun': {
+              await aliyun.upload({
+                putPath,
+                getPath,
+                hasCache
+              })
+              break
+            }
+            case 'qiniu': {
+              await qiniu.upload({
+                putPath,
+                getPath,
+                hasCache
+              })
+              break
+            }
+            case 'tencent': {
+              await tencent.upload({
+                putPath,
+                getPath,
+                hasCache
+              })
+              break
             }
           }
         }
-      }).catch(console.log)
+      }
     }
 
     const isLastUpload = ({
       fileName,
       fileSuffix
     }) => {
-      return CONFIG.lastUpload.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.lastUpload.fileName.find(file => fileName.indexOf(file) > -1)
+      return CONFIG.lastUpload.fileSuffix.includes(fileSuffix) || CONFIG.lastUpload.fileName.find(file => fileName.indexOf(file) > -1)
         ? true
         : false
     }
@@ -68,7 +65,7 @@ module.exports = () => {
       fileName,
       fileSuffix
     }) => {
-      return CONFIG.noCache.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.noCache.fileName.find(file => fileName.indexOf(file) > -1)
+      return CONFIG.noCache.fileSuffix.includes(fileSuffix) || CONFIG.noCache.fileName.find(file => fileName.indexOf(file) > -1)
         ? true
         : false
     }
@@ -77,7 +74,7 @@ module.exports = () => {
       fileName,
       fileSuffix
     }) => {
-      return CONFIG.ignore.fileSuffix.find(suffix => suffix === fileSuffix) || CONFIG.ignore.fileName.find(file => fileName.indexOf(file) > -1)
+      return CONFIG.ignore.fileSuffix.includes(fileSuffix) || CONFIG.ignore.fileName.find(file => fileName.indexOf(file) > -1)
         ? true
         : false
     }
@@ -91,7 +88,7 @@ module.exports = () => {
       // <!-- 文件夹上传
       let getDirectories = []
       let putDirectories = []
-      CONFIG.deploy.directories.map(directory => {
+      CONFIG.deploy.directories.forEach(directory => {
         let from
         let to
         if (typeof directory === 'string') {
@@ -112,21 +109,22 @@ module.exports = () => {
             let fileSuffix = stat.name.split('.').pop().toLowerCase()
             let getPath = `${root}/${stat.name}`
             let putPath = `${root.replace(putDirectories[i].from, putDirectories[i].to)}/${stat.name}`.substring(1)
+            let fileName = putPath.split('/').pop()
             let file = {
               getPath,
               putPath,
               hasCache: hasCache({
-                fileName: putPath.split('/').pop(),
+                fileName,
                 fileSuffix
               }),
               ignore: isIgnore({
-                fileName: putPath.split('/').pop(),
+                fileName,
                 fileSuffix
               })
             }
             if (
               isLastUpload({
-                fileName: putPath.split('/').pop(),
+                fileName,
                 fileSuffix
               })
             ) {
@@ -143,7 +141,7 @@ module.exports = () => {
       // <!-- 制定文件上传
       let getFiles = []
       let putFiles = []
-      CONFIG.deploy.files.map(file => {
+      CONFIG.deploy.files.forEach(file => {
         let from
         let to
         if (typeof file === 'string') {
@@ -159,17 +157,18 @@ module.exports = () => {
         let fileSuffix = putFiles[i].split('.').pop().toLowerCase()
         let getPath = getFiles[i]
         let putPath = putFiles[i].substring(1)
+        let fileName = putPath.split('/').pop()
         let file = {
           getPath,
           putPath,
           hasCache: hasCache({
-            fileName: putPath.split('/').pop(),
+            fileName,
             fileSuffix
           })
         }
         if (
           isLastUpload({
-            fileName: putPath.split('/').pop(),
+            fileName,
             fileSuffix
           })
         ) {
@@ -181,16 +180,16 @@ module.exports = () => {
       // 制定文件上传 -->
 
       console.log()
-      console.log(`${'Cloud Type:'.padStart(18)} ${chalk.yellow(CONFIG.type)}`)
-      console.log(`${'Environment:'.padStart(18)} ${chalk.yellow(process.env.DEPLOY_ENV)}`)
+      console.log(`${'云服务商:'.padStart(18)} ${chalk.yellow(CONFIG.type)}`)
+      console.log(`${'发布环境:'.padStart(18)} ${chalk.yellow(process.env.DEPLOY_ENV)}`)
       console.log()
       const spinner = ora('Loading files').start()
       walker.on('end', () => {
         spinner.stop()
         if (process.stdout.columns > 160) {
-          console.log(`${'Status'.padStart(12)}   ${'Cache Status'.padStart(12)}   Local Asset -> Remote Asset`)
+          console.log(`${'上传状态'.padStart(7)}${'支持缓存'.padStart(14)}${'本地资源 -> 远端资源'.padStart(21)}`)
         } else {
-          console.log(`${'Status'.padStart(12)}   ${'Cache Status'.padStart(12)}   Remote Asset`)
+          console.log(`${'上传状态'.padStart(7)}${'支持缓存'.padStart(14)}${'远端资源'.padStart(21)}`)
         }
         upload(files)
       })
