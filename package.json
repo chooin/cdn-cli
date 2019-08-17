@@ -1,6 +1,6 @@
 {
   "name": "cdn-cli",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "对象存储部署前端项目，支持阿里云/七牛云/腾讯云",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -180,16 +180,16 @@ module.exports = () => {
       // 制定文件上传 -->
 
       console.log()
-      console.log(`${'云服务商:'.padStart(18)} ${chalk.yellow(CONFIG.type)}`)
+      console.log(`${'服务商:'.padStart(19)} ${chalk.yellow(CONFIG.type)}`)
       console.log(`${'发布环境:'.padStart(18)} ${chalk.yellow(process.env.DEPLOY_ENV)}`)
       console.log()
-      const spinner = ora('Loading files').start()
+      const spinner = ora('处理中..').start()
       walker.on('end', () => {
         spinner.stop()
         if (process.stdout.columns > 160) {
-          console.log(`${'上传状态'.padStart(7)}${'支持缓存'.padStart(14)}${'本地资源 -> 远端资源'.padStart(21)}`)
+          console.log(`${'状态'.padStart(5)}${'缓存'.padStart(16)}${'本地资源 -> 远端资源'.padStart(26)}`)
         } else {
-          console.log(`${'上传状态'.padStart(7)}${'支持缓存'.padStart(14)}${'远端资源'.padStart(21)}`)
+          console.log(`${'状态'.padStart(5)}${'缓存'.padStart(16)}${'远端资源'.padStart(18)}`)
         }
         upload(files)
       })
