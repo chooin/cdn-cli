@@ -1,10 +1,10 @@
-const walk = require('walk')
+import walk from 'walk'
 const chalk = require('chalk')
 const ora = require('ora')
 
-const aliyun = require('./utils/aliyun')
-const qiniu = require('./utils/qiniu')
-const tencent = require('./utils/tencent')
+const aliyun = require('./types/aliyun')
+const qiniu = require('./types/qiniu')
+const tencent = require('./types/tencent')
 const {
   config
 } = require('./utils/config')

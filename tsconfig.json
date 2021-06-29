@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES2017",
+    "lib": ["ESNext"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "outDir": "lib"
+  },
+  "exclude": ["node_modules/**"],
+  "include": ["src/**/*"]
+}
