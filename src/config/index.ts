@@ -1,3 +1,13 @@
+import path from 'path';
+
+export interface Rule {
+  from: string;
+  to: string;
+  ignore: string[];
+  noCache: string[];
+  lastUpload: string[];
+}
+
 export type Aliyun = {
   type: 'aliyun';
   region: string;
@@ -22,10 +32,20 @@ export type Tencent = {
   secretKey: string;
 }
 
-export type Environments = Aliyun | Qiniu | Tencent
+export type Environment = Aliyun | Qiniu | Tencent
 
-export default (): Promise<Environments> => {
-  return new Promise((resolve) => {
-    resolve(require('./deploy.config').environments)
-  })
+export interface Config {
+  rules: Rule[];
+  environment: Environment;
+  environments: {
+    [k: string]: Environment;
+  }
 }
+
+const config = (): Config => {
+  return {
+    ...require(path.resolve(process.cwd(), './deploy.config'))
+  }
+}
+
+export default config();

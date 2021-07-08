@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ES2017",
+    "target": "ES6",
+    "module": "CommonJS",
     "lib": ["ESNext"],
     "esModuleInterop": true,
     "moduleResolution": "node",
     "removeComments": true,
-    "outDir": "lib"
+    "outDir": "lib",
+    "skipLibCheck": false,
   },
-  "exclude": ["node_modules/**"],
+  "exclude": ["node_modules/**/*"],
   "include": ["src/**/*"]
 }

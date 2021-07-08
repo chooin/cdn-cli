@@ -5,11 +5,12 @@ export const success = ({
   getPath,
   putPath
 }) => {
-  const status = ` - ${kleur.green('[成功]'.padEnd(16))}`
+  const status = kleur.green('[成功]'.padEnd(16))
   hasCache = hasCache
     ? kleur.yellow('[不支持]'.padEnd(15))
     : '[支持]'.padEnd(16)
-  console.log(`${status}${hasCache}${getPath}${kleur.yellow(' -> ')}${putPath}`)
+  const arrow = kleur.yellow(' -> ')
+  console.log(`${status}${hasCache}${getPath}${arrow}${putPath}`)
 }
 
 export const fail = ({
@@ -17,9 +18,10 @@ export const fail = ({
   getPath,
   putPath
 }) => {
-  const status = ` - ${kleur.red('[失败]'.padEnd(16))}`
+  const status = kleur.red('[失败]'.padEnd(16))
   hasCache = hasCache
     ? kleur.yellow('[不支持]'.padEnd(15))
     : '[支持]'.padEnd(16)
-  console.log(`${status}${hasCache}${getPath}${kleur.yellow(' -> ')}${putPath}`)
+  const arrow = kleur.yellow(' -> ')
+  console.log(`${status}${hasCache}${getPath}${arrow}${putPath}`)
 }

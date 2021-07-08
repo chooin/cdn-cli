@@ -1,29 +1,22 @@
 #!/usr/bin/env node
-
 const program = require('commander')
 const kleur = require('kleur')
 const path = require('path')
-
 const {
-  createFile,
-  canCreateFile
+  copyFile,
+  canCopyFile
 } = require('../lib/utils/file')
-const deploy =  require('../src')
+const { deploy } =  require('../lib')
 
 program
   .version('3.0.0')
 
 program
   .command('init')
-  .description(kleur.gray('初始化'))
+  .description(kleur.yellow('初始化'))
   .action(() => {
-    canCreateFile({
-      to: './deploy.config.js'
-    }).then(() => {
-      createFile({
-        from: path.resolve(__dirname, '../templates/deploy.config.js'),
-        to: './deploy.config.js',
-      })
+    canCopyFile('./deploy.config.js').then(() => {
+      copyFile(path.resolve(__dirname, '../templates/deploy.config.js'), './deploy.config.js')
     }).catch(() => {
       console.log('deploy.config.js 文件已存在')
     })
@@ -31,7 +24,7 @@ program
 
 program
   .command('deploy <environment>')
-  .description(kleur.gray('部署项目'))
+  .description(kleur.yellow('上传资源'))
   .action(environment => {
     deploy(environment)
   })
