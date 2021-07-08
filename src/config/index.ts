@@ -2,10 +2,10 @@ import path from 'path';
 
 export interface Rule {
   from: string;
-  to: string;
-  ignore: string[];
-  noCache: string[];
-  lastUpload: string[];
+  to?: string;
+  ignore?: string[];
+  noCache?: string[];
+  lastUpload?: string[];
 }
 
 export type Aliyun = {

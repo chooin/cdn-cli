@@ -1,10 +1,10 @@
 import Oss from 'ali-oss';
-import {logger} from '../index'
+import * as logger from '../logger'
 import config, {Aliyun} from '../../config'
 
 export default ({
-  putPath,
-  getPath,
+  from,
+  to,
   hasCache
 }): Promise<void> => {
   return new Promise((resolve) => {
@@ -14,7 +14,7 @@ export default ({
       accessKeyId,
       accessKeySecret,
     } = config.environment as Aliyun
-    const oss = new Oss({
+    const client = new Oss({
       region,
       bucket,
       accessKeyId,
@@ -27,24 +27,24 @@ export default ({
         }
       }
       : {}
-    oss
-      .put(putPath, getPath, options)
-      .then(({res}) => {
-        if (res?.status === 200) {
-          logger.success({
-            getPath,
-            putPath,
-            hasCache
-          })
-          resolve()
-        } else {
+    client
+      .put(to, from, options)
+      .then((result) => {
+        if (result?.res?.status !== 200) {
           logger.fail({
-            getPath,
-            putPath,
+            from,
+            to,
             hasCache
           })
+          console.log(result)
           process.exit(1)
         }
+        logger.success({
+          from,
+          to,
+          hasCache
+        })
+        resolve()
       })
   })
 }

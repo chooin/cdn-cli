@@ -6,8 +6,8 @@ export type Vendor = 'aliyun' | 'qiniu' | 'tencent';
 
 interface Options {
   type: string;
-  putPath: string;
-  getPath: string;
+  to: string;
+  from: string;
   hasCache: boolean;
 }
 
