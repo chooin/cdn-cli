@@ -3,18 +3,18 @@ module.exports = {
     {
       from: './dist/**/*',
       to: '.',
+      ignore: [
+        '**/*.map',
+        '**/.DS_store',
+        '**/node_modules'
+      ],
+      noCache: [
+        '**/*.html'
+      ],
+      lastUpload: [
+        '**/*.html'
+      ],
     }
-  ],
-  ignore: [
-    '**/*.map',
-    '**/.DS_store',
-    '**/node_modules'
-  ],
-  noCache: [
-    '**/*.html'
-  ],
-  lastUpload: [
-    '**/*.html'
   ],
   environments: {
     production: {

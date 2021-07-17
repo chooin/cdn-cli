@@ -2,7 +2,7 @@ node_modules/
 dist/
 .idea
 
-deploy.config.js
+cdn.config.js
 yarn-debug.log*
 yarn-error.log*
 .DS_Store

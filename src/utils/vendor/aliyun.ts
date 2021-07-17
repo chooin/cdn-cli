@@ -1,11 +1,11 @@
 import Oss from 'ali-oss';
 import * as logger from '../logger'
-import config, {Aliyun} from '../../config'
+import {config, Aliyun} from '../../config'
 
 export default ({
   from,
   to,
-  hasCache
+  noCache,
 }): Promise<void> => {
   return new Promise((resolve) => {
     const {
@@ -20,7 +20,7 @@ export default ({
       accessKeyId,
       accessKeySecret,
     })
-    const options = hasCache
+    const options = noCache
       ? {
         headers: {
           'Cache-Control': 'no-cache, private'
@@ -31,18 +31,18 @@ export default ({
       .put(to, from, options)
       .then((result) => {
         if (result?.res?.status !== 200) {
-          logger.fail({
+          logger.uploadFail({
             from,
             to,
-            hasCache
+            noCache
           })
           console.log(result)
           process.exit(1)
         }
-        logger.success({
+        logger.uploadSuccess({
           from,
           to,
-          hasCache
+          noCache
         })
         resolve()
       })

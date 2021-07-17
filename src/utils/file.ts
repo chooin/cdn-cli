@@ -1,24 +1,23 @@
 import * as path from 'path'
 import {existsSync, copySync, statSync} from 'fs-extra'
 
-export const isFile = (path: string): boolean => {
+export const isFileSync = (path: string): boolean => {
   const stat = statSync(path)
 
   return stat.isFile()
 }
 
-export const isDirectory = (path: string): boolean => {
+export const isDirectorySync = (path: string): boolean => {
   const stat = statSync(path)
 
   return stat.isDirectory()
 }
 
-
-export const copyFile = (from, to) => {
+export const copyFileSync = (from: string, to: string) => {
   copySync(from, to)
 }
 
-export const canCopyFile = (to): Promise<void> => {
+export const canCopyFile = (to: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (existsSync(path.resolve(to))) {
       reject()

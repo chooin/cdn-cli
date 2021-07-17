@@ -1,11 +1,11 @@
 import qiniu from 'qiniu'
 import * as logger from '../logger'
-import config, {Qiniu} from '../../config'
+import {config, Qiniu} from '../../config'
 
 export default ({
   from,
   to,
-  hasCache,
+  noCache,
 }): Promise<void> => {
   return new Promise(resolve => {
     const {
@@ -31,18 +31,18 @@ export default ({
       putExtra,
       (err, respBody, respInfo) => {
         if (err || respInfo?.statusCode !== 200) {
-          logger.fail({
+          logger.uploadFail({
             from,
             to,
-            hasCache
+            noCache
           })
           console.log(err)
           process.exit(1)
         }
-        logger.success({
+        logger.uploadSuccess({
           from,
           to,
-          hasCache
+          noCache
         })
         resolve()
       }

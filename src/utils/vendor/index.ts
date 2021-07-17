@@ -8,7 +8,7 @@ interface Options {
   type: string;
   to: string;
   from: string;
-  hasCache: boolean;
+  noCache: boolean;
 }
 
 export default (vendor: Vendor, options: Options): void => {

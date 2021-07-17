@@ -1,12 +1,12 @@
 import Cos from 'cos-nodejs-sdk-v5'
 import {createReadStream, statSync} from 'fs-extra'
 import * as logger from '../logger'
-import config, {Tencent} from '../../config'
+import {config, Tencent} from '../../config'
 
 export default ({
   from,
   to,
-  hasCache
+  noCache
 }): Promise<void> => {
   return new Promise(resolve => {
     const {
@@ -21,7 +21,7 @@ export default ({
     })
     const body = createReadStream(from)
     const contentLength = statSync(from).size
-    const cacheControl = hasCache
+    const cacheControl = noCache
       ? 'no-cache, private'
       : undefined
     client
@@ -36,18 +36,18 @@ export default ({
         },
       (err, data) => {
         if (err || data?.statusCode !== 200) {
-          logger.fail({
+          logger.uploadFail({
             from,
             to,
-            hasCache
+            noCache
           })
           console.log(err)
           process.exit(1)
         }
-        logger.success({
+        logger.uploadSuccess({
           from,
           to,
-          hasCache
+          noCache
         })
         resolve()
       })
