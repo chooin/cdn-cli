@@ -1,4 +1,5 @@
 import {setConfig, config} from './config'
+import _ from 'lodash'
 import {upload} from './utils'
 
 const deploy = async (environment) => {
@@ -28,15 +29,10 @@ const deploy = async (environment) => {
     console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'远端资源'.padStart(16)}`)
   }
 
-  config.rules.forEach((rule) => {
-    rule.files.forEach((file) => {
-      upload(config.environment.type, {
-        from: file.from,
-        to: file.to,
-        noCache: file.noCache,
-      })
-    })
-  })
+  let files = _.flatten([...config.rules.map(({files}) => files)])
+  
+  await Promise.all(files.filter((file) => !file.lastUpload).map((file) => upload(config.environment.type, file)))
+  await Promise.all(files.filter((file) => file.lastUpload).map((file) => upload(config.environment.type, file)))
 }
 
 export {
