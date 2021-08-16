@@ -20,15 +20,23 @@ cdn init
 
 ``` js
 module.exports = {
-  files: [
+  rules: [
     {
-      from: './dist',
-      to: '.'
+      from: './dist/**/*',
+      to: '.',
+      ignore: [
+        '**/*.map',
+        '**/.DS_store',
+        '**/node_modules'
+      ],
+      noCache: [
+        '**/*.html'
+      ],
+      lastUpload: [
+        '**/*.html'
+      ],
     }
   ],
-  ignore: [],
-  noCache: [],
-  lastUpload: [],
   environments: {
     production: {
       type: 'aliyun',
@@ -54,7 +62,6 @@ module.exports = {
     }
   }
 }
-
 ```
 
 > 1. 将代码部署到阿里云

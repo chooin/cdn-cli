@@ -1,21 +1,26 @@
-import {join, resolve} from 'path';
-import {file, logger} from "../utils";
-import glob from "glob";
+import {resolve, join, dirname} from 'path';
+import glob from 'glob'
+import dirGlob from 'dir-glob'
+import _ from 'lodash'
+import {logger} from '../utils';
+import {isFileSync} from "../utils/file";
+import minimatch from "minimatch";
 
 export interface File {
   from: string;
-  to?: string;
-  ignore?: boolean;
-  lastUpload?: boolean;
-  hasCache?: boolean;
+  to: string;
+  isFile: boolean;
+  ignore: boolean;
+  lastUpload: boolean;
+  noCache: boolean;
 }
 
 export interface Rule {
   from: string;
-  to?: string;
-  ignore?: string[];
-  noCache?: string[];
-  lastUpload?: string[];
+  to: string;
+  ignore: string[];
+  noCache: string[];
+  lastUpload: string[];
   files: File[];
 }
 
@@ -55,18 +60,24 @@ export interface Config {
 
 const defaultConfig = (): Config => {
   return {
-    ...require(resolve(process.cwd(), './deploy.config'))
+    ...require(resolve(process.cwd(), './cdn.config'))
   }
 }
 
-const walk = (from, options = {}) => {
-  return new Promise((resolve, reject) => {
+export const config = defaultConfig()
+
+/**
+ * 遍历目录
+ * @param {string} from
+ */
+const walk = (from): Promise<string[]> => {
+  return new Promise((resolve) => {
     glob(
       from,
-      options,
+      {},
       (err, matches) => {
-        if (err !== null) {
-          console.log(err)
+        if (err) {
+          logger.error(err.message)
           process.exit(1)
         }
         resolve(matches)
@@ -75,51 +86,62 @@ const walk = (from, options = {}) => {
   })
 }
 
-export const config = defaultConfig()
+// 配置 rules 的 files
+const setFiles = async () => {
+  await Promise.all(config.rules.map((rule) => walk(rule.from))).then((res) => {
+    res.map((files, index) => {
+      config.rules[index].files = files.map((file) => {
+        const fullPath = resolve('.', file)
+        // 判断是不是文件
+        const isFile = isFileSync(fullPath)
+        // ignore 处理
+        const ignore = config.rules[index].ignore.some(i => minimatch(file, i))
+        // lastUpload 处理
+        const lastUpload = config.rules[index].lastUpload.some(i => minimatch(file, i))
+        // noCache 处理
+        const noCache = config.rules[index].noCache.some(i => minimatch(file, i))
+        return {
+          from: fullPath,
+          to: join(config.rules[index].to, file).replace(dirname(config.rules[index].from), '').replace('/', ''),
+          isFile,
+          ignore,
+          lastUpload,
+          noCache,
+        }
+      }) as File[]
+    })
+  })
+}
 
 export const setConfig = async (environment) => {
   config.environment = config.environments[environment]
   if (config.environment) {
-    delete config.environments
+    delete config.environments;
   } else {
-    console.log(logger.error('错误，请检查 deploy.config.js 中 environment 是否存在'))
+    logger.error('错误，请检查 cdn.config.js 中 environment 是否存在')
     process.exit(1)
   }
   config.rules = config
     .rules
-    .filter(item => item.from)
-    .map(item => {
-      return Object.assign(
-        {
-          to: '.',
-          ignore: [],
-          noCache: [],
-          lastUpload: [],
-          files: [],
-        },
-        item
-      )
-    })
-    .map((item) => {
-      // from: 是目录
-      if (item.from.indexOf('*') === -1) {
-        if (file.isDirectorySync(item.from)) {
-          item.to = join(item.from, item.to)
-          item.from = `${item.from}/**/*`
-        }
+    .filter(item => {
+      if (item.from && item.to) {
+        return true;
       }
-      return item
+      logger.error('错误，必须配置 from 和 to')
+      process.exit(1)
     })
-  await Promise.all(config.rules.map((rule) => {
-    return walk(rule.from, {
-      ignore: rule.ignore
-    })
-  })).then(files => {
-    config.rules = config.rules.map((rule, index) => {
+    .map(({from, to, ignore, lastUpload, noCache, ...args}) => {
       return {
-        ...rule,
-        files: files[index],
+        ...args,
+        from: _.first(dirGlob.sync(from ?? [])),
+        to,
+        ignore: dirGlob.sync(ignore ?? []),
+        lastUpload: dirGlob.sync(lastUpload ?? []),
+        noCache: dirGlob.sync(noCache ?? []),
       }
-    })
-  })
+    }) as Rule[]
+
+  await setFiles();
+
+  return config;
 }

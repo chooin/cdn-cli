@@ -36,7 +36,7 @@ export default ({
             to,
             noCache
           })
-          console.log(err)
+          console.log(err.message)
           process.exit(1)
         }
         logger.uploadSuccess({

@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "target": "ES6",
     "module": "CommonJS",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "esModuleInterop": true,
     "moduleResolution": "node",
     "removeComments": true,

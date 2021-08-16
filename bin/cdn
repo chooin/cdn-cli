@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const program = require('commander')
 const kleur = require('kleur')
 const path = require('path')
@@ -15,10 +16,10 @@ program
   .command('init')
   .description(kleur.yellow('初始化'))
   .action(() => {
-    canCopyFile('./deploy.config.js').then(() => {
-      copyFile(path.resolve(__dirname, '../templates/deploy.config.js'), './deploy.config.js')
+    canCopyFile('./cdn.config.js').then(() => {
+      copyFile(path.resolve(__dirname, '../templates/cdn.config.js'), './cdn.config.js')
     }).catch(() => {
-      console.log('deploy.config.js 文件已存在')
+      console.log('cdn.config.js 文件已存在')
     })
   })
 

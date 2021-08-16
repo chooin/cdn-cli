@@ -26,30 +26,31 @@ export default ({
       : undefined
     client
       .putObject(
-      {
-        Bucket: bucket,
-        Region: region,
-        Key: to,
-        Body: body,
-        ContentLength: contentLength,
-        CacheControl: cacheControl,
+        {
+          Bucket: bucket,
+          Region: region,
+          Key: to,
+          Body: body,
+          ContentLength: contentLength,
+          CacheControl: cacheControl,
         },
-      (err, data) => {
-        if (err || data?.statusCode !== 200) {
-          logger.uploadFail({
+        (err, data) => {
+          if (err || data?.statusCode !== 200) {
+            logger.uploadFail({
+              from,
+              to,
+              noCache
+            })
+            logger.error(err?.message)
+            process.exit(1)
+          }
+          logger.uploadSuccess({
             from,
             to,
             noCache
           })
-          console.log(err)
-          process.exit(1)
+          resolve()
         }
-        logger.uploadSuccess({
-          from,
-          to,
-          noCache
-        })
-        resolve()
-      })
+      )
   })
 }
