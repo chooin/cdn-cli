@@ -2,7 +2,7 @@
 
 [![npm package](https://img.shields.io/npm/v/cdn-cli.svg)](https://www.npmjs.org/package/cdn-cli)
 
-<img src="https://github.com/Chooin/cdn-cli/blob/master/awesome.gif" width="780" height="auto" />
+<img src="https://github.com/chooin/cdn-cli/blob/master/awesome.gif" width="780" height="auto" />
 
 ##### 1. 安装依赖包
 
@@ -22,7 +22,7 @@ cdn init
 module.exports = {
   rules: [
     {
-      from: './dist/**/*',
+      from: 'dist',
       to: '.',
       ignore: [
         '**/*.map',

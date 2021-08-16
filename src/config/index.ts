@@ -1,10 +1,10 @@
-import {resolve, join, dirname} from 'path';
+import * as path from 'path';
 import glob from 'glob'
 import dirGlob from 'dir-glob'
 import _ from 'lodash'
 import {logger} from '../utils';
-import {isFileSync} from "../utils/file";
-import minimatch from "minimatch";
+import {isFileSync} from '../utils/file';
+import minimatch from 'minimatch';
 
 export interface File {
   from: string;
@@ -60,7 +60,7 @@ export interface Config {
 
 const defaultConfig = (): Config => {
   return {
-    ...require(resolve(process.cwd(), './cdn.config'))
+    ...require(path.resolve(process.cwd(), './cdn.config'))
   }
 }
 
@@ -91,7 +91,7 @@ const setFiles = async () => {
   await Promise.all(config.rules.map((rule) => walk(rule.from))).then((res) => {
     res.map((files, index) => {
       config.rules[index].files = files.map((file) => {
-        const fullPath = resolve('.', file)
+        const fullPath = path.resolve('.', file)
         // 判断是不是文件
         const isFile = isFileSync(fullPath)
         // ignore 处理
@@ -102,7 +102,7 @@ const setFiles = async () => {
         const noCache = config.rules[index].noCache.some(i => minimatch(file, i))
         return {
           from: fullPath,
-          to: join(config.rules[index].to, file).replace(dirname(config.rules[index].from), '').replace('/', ''),
+          to: path.join(config.rules[index].to, file).replace(path.dirname(config.rules[index].from), '').replace('/', ''),
           isFile,
           ignore,
           lastUpload,

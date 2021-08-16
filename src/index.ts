@@ -22,10 +22,20 @@ const deploy = async (environment) => {
     }
   })
 
-  await upload(config.environment.type, {
-    from: '',
-    to: '',
-    noCache: false,
+  if (process.stdout.columns > 160) {
+    console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'本地资源 -> 远端资源'.padStart(24)}`)
+  } else {
+    console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'远端资源'.padStart(16)}`)
+  }
+
+  config.rules.forEach((rule) => {
+    rule.files.forEach((file) => {
+      upload(config.environment.type, {
+        from: file.from,
+        to: file.to,
+        noCache: file.noCache,
+      })
+    })
   })
 }
 
