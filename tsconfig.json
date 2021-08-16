@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES6",
+    "module": "CommonJS",
+    "lib": ["ESNext", "DOM"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "outDir": "lib",
+    "skipLibCheck": false,
+  },
+  "exclude": ["node_modules/**/*"],
+  "include": ["src/**/*"]
+}

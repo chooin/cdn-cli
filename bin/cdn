@@ -1,83 +1,41 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const chalk = require('chalk')
-const fs = require('fs')
+const kleur = require('kleur')
 const path = require('path')
-const dayjs = require('dayjs')
-
 const {
-  createFile,
-  canCreateFile
-} = require('../utils/file')
-const index =  require('../index')
-const support = [
-  'aliyun',
-  'tencent',
-  'qiniu'
-]
+  copyFile,
+  canCopyFile
+} = require('../lib/utils/file')
+const { deploy } =  require('../lib')
 
 program
   .version('3.0.0')
-  .option('-t, --tag [tag]', '')
 
 program
-  .command('init [type]')
-  .description(chalk.gray(`init ${support.join('|')}`))
-  .action(type => {
-    if (
-      support.includes(type)
-    ) {
-      canCreateFile({
-        to: `./deploy-config/${type}`
-      }).then(() => {
-        createFile({
-          from: path.resolve(__dirname, `../templates/config.json`),
-          to: `./deploy-config/config.json`,
-          replace: [
-            { from: 'type', to: type }
-          ]
-        })
-        fs
-          .readdirSync(path.resolve(__dirname, `../templates/${type}`))
-          .forEach(file => {
-            createFile({
-              from: path.resolve(__dirname, `../templates/${type}/${file}`),
-              to: `./deploy-config/${type}/${file}`
-            })
-          })
-      }).catch(() => console.log('已取消'))
-    } else {
-      console.log('已取消')
-    }
+  .command('init')
+  .description(kleur.yellow('初始化'))
+  .action(() => {
+    canCopyFile('./cdn.config.js').then(() => {
+      copyFile(path.resolve(__dirname, '../templates/cdn.config.js'), './cdn.config.js')
+    }).catch(() => {
+      console.log('cdn.config.js 文件已存在')
+    })
   })
 
 program
-  .command('deploy [environment]')
-  .description(chalk.gray('deploy project'))
+  .command('deploy <environment>')
+  .description(kleur.yellow('上传资源'))
   .action(environment => {
-    process.env.DEPLOY_ENV = environment || 'development'
-    index()
-    if (program.tag) {
-      let tag = `tag: ${program.tag} 操作时间: ${dayjs().format('YYYY-MM-DD hh:mm:ss')}\n`
-      let to = path.resolve('./cdn-cli.log')
-      if (fs.existsSync(to)) {
-        fs.readFile(to, 'utf8', (err, data) => {
-          if (err) {}
-          fs.writeFile(to, `${tag}${data}`, 'utf8', () => {})
-        })
-      } else {
-        fs.writeFile(to, tag, 'utf8', () => {})
-      }
-    }
+    deploy(environment)
   })
 
 program.on('--help', () => {
-    console.log()
-    console.log('  Examples:')
-    console.log()
-    console.log('    $ cdn init aliyun')
-    console.log('    $ cdn deploy development')
-  })
+  console.log()
+  console.log('  例子:')
+  console.log()
+  console.log('    $ cdn init')
+  console.log('    $ cdn deploy development')
+})
 
 program.parse(process.argv)
