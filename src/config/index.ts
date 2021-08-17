@@ -100,9 +100,13 @@ const setFiles = async () => {
         const lastUpload = config.rules[index].lastUpload.some(i => minimatch(file, i))
         // noCache 处理
         const noCache = config.rules[index].noCache.some(i => minimatch(file, i))
+        let to = path.join(config.rules[index].to, file.replace(path.dirname(config.rules[index].from), ''))
+        if (to.indexOf('/') === 0) {
+          to.replace('/', '')
+        }
         return {
           from: fullPath,
-          to: path.join(config.rules[index].to, file).replace(path.dirname(config.rules[index].from), '').replace('/', ''),
+          to,
           isFile,
           ignore,
           lastUpload,
