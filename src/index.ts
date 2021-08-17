@@ -23,14 +23,10 @@ const deploy = async (environment) => {
     }
   })
 
-  if (process.stdout.columns > 160) {
-    console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'本地资源 -> 远端资源'.padStart(24)}`)
-  } else {
-    console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'远端资源'.padStart(16)}`)
-  }
+  console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'本地资源 -> 远端资源'.padStart(24)}`)
 
   let files = _.flatten([...config.rules.map(({files}) => files)])
-  
+
   await Promise.all(files.filter((file) => !file.lastUpload).map((file) => upload(config.environment.type, file)))
   await Promise.all(files.filter((file) => file.lastUpload).map((file) => upload(config.environment.type, file)))
 }
