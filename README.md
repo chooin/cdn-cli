@@ -63,11 +63,9 @@ module.exports = {
 
 ```
 
-> 1. 将代码部署到阿里云
-> 2. 将 `./dist` 目录里面的文件放到 `.` 目录下，将 `./static` 里面的文件放到 `./static` 目录下
-> 3. 上传 `./product.html` 到 `./item.html`，上传 `./login.html` 到 `./login.html`
-> 4. 不缓存后缀名为 `html` 的文件，不缓存 `service-worker.js` 文件；后缀名为 `html` 的文件最后上传
-> 5. 忽略后缀名为 `map` 的文件
+> 将 `./dist` 目录里面的文件放到 `.` 目录下
+> 不缓存后缀名为 `html` 的文件，后缀名为 `html` 的文件最后上传
+> 忽略后缀名为 `.DS_store` 的文件
 
 ##### 4. 发布项目
 
@@ -77,7 +75,5 @@ cdn deploy test
 cdn deploy development
 ...
 ```
-
-注：可以自定义
 
 
