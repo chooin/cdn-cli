@@ -2,22 +2,18 @@
 
 const program = require('commander')
 const kleur = require('kleur')
-const path = require('path')
-const {
-  copyFile,
-  canCopyFile
-} = require('../lib/utils/file')
-const { deploy } =  require('../lib')
+const { resolve } = require('path')
 
 program
-  .version('3.0.0')
+  .version('4.0.0')
 
 program
   .command('init')
   .description(kleur.yellow('初始化'))
   .action(() => {
-    canCopyFile('./cdn.config.js').then(() => {
-      copyFile(path.resolve(__dirname, '../templates/cdn.config.js'), './cdn.config.js')
+    require('../lib/utils/file').canCopyFile(resolve('./cdn.config.js')).then(() => {
+      require('../lib/utils/file')
+        .copyFileSync(resolve(__dirname, '../templates/cdn.config.js'), resolve('./cdn.config.js'))
     }).catch(() => {
       console.log('cdn.config.js 文件已存在')
     })
@@ -27,7 +23,7 @@ program
   .command('deploy <environment>')
   .description(kleur.yellow('上传资源'))
   .action(environment => {
-    deploy(environment)
+    require('../lib').deploy(environment)
   })
 
 program.on('--help', () => {

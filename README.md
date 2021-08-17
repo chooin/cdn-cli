@@ -26,9 +26,7 @@ module.exports = {
       from: 'dist',
       to: '.',
       ignore: [
-        '**/*.map',
         '**/.DS_store',
-        '**/node_modules'
       ],
       noCache: [
         '**/*.html'
@@ -47,7 +45,7 @@ module.exports = {
       accessKeySecret: '',
     },
     test: {
-      type: 'qiniu ',
+      type: 'qiniu',
       region: '',
       bucket: '',
       accessKey: '',
@@ -63,6 +61,7 @@ module.exports = {
     }
   }
 }
+
 ```
 
 > 1. 将代码部署到阿里云
