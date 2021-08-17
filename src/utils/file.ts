@@ -19,7 +19,7 @@ export const copyFileSync = (from: string, to: string) => {
 
 export const canCopyFile = (to: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    if (existsSync(path.resolve(to))) {
+    if (existsSync(to)) {
       reject()
     } else {
       resolve()
