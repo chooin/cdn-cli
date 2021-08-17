@@ -1,4 +1,4 @@
-# 对象存储部署前端项目，支持阿里云/腾讯云/七牛云
+# 通过命令上传文件到对象存储（支持阿里云、腾讯云、七牛云）
 
 [![npm package](https://img.shields.io/npm/v/cdn-cli.svg)](https://www.npmjs.org/package/cdn-cli)
 [![npm](https://img.shields.io/npm/dt/cdn-cli.svg?style=flat-square)](https://www.npmjs.com/package/cdn-cli)
