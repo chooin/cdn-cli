@@ -7,3 +7,5 @@ cdn.config.js
 yarn-debug.log*
 yarn-error.log*
 .DS_Store
+
+!templates/cdn.config.js

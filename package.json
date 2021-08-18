@@ -1,6 +1,6 @@
 {
   "name": "cdn-cli",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "对象存储部署前端项目，支持阿里云/七牛云/腾讯云",
   "scripts": {
     "build": "tsc"

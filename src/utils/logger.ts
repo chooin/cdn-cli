@@ -15,7 +15,7 @@ export const uploadSuccess = ({
     ? yellow('[不支持]'.padEnd(15))
     : '[支持]'.padEnd(16)
   const arrow = yellow(' -> ')
-  console.log(`${status}${noCache}${from}${arrow}${to}`)
+  console.log(`${status}${noCache}${from}${arrow}/${to}`)
 }
 
 export const uploadFail = ({
@@ -28,7 +28,7 @@ export const uploadFail = ({
     ? yellow('[不支持]'.padEnd(15))
     : '[支持]'.padEnd(16)
   const arrow = yellow(' -> ')
-  console.log(`${status}${noCache}${from}${arrow}${to}`)
+  console.log(`${status}${noCache}${from}${arrow}/${to}`)
 }
 
 const kleur = (messages: Messages, color: Color, options?: Options) => {
