@@ -19,7 +19,6 @@
     "kleur": "^4.1.4",
     "lodash": "^4.17.21",
     "minimatch": "^3.0.4",
-    "ora": "^5.4.1",
     "qiniu": "^7.4.0"
   },
   "devDependencies": {
