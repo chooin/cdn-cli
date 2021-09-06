@@ -5,16 +5,10 @@
 
 <img src="https://github.com/chooin/cdn-cli/blob/master/awesome.gif" width="780" height="auto" />
 
-##### 1. 安装依赖包
-
-```sh
-npm install cdn-cli -g
-```
-
 ##### 2. 初始化项目
 
 ```sh
-cdn init
+npx cdn-cli init
 ```
 
 ##### 3. 配置
@@ -70,10 +64,10 @@ module.exports = {
 
 ##### 4. 发布项目
 
-``` sh
-cdn deploy production
-cdn deploy test
-cdn deploy development
+```sh
+npx cdn-cli deploy production
+npx cdn-cli deploy test
+npx cdn-cli deploy development
 ...
 ```
 
