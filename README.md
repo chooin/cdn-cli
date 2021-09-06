@@ -5,13 +5,13 @@
 
 <img src="https://github.com/chooin/cdn-cli/blob/master/awesome.gif" width="780" height="auto" />
 
-##### 2. 初始化项目
+##### 1. 初始化项目
 
 ```sh
 npx cdn-cli init
 ```
 
-##### 3. 配置
+##### 2. 配置
 
 ``` js
 module.exports = {
@@ -62,7 +62,7 @@ module.exports = {
 > 2. 不缓存后缀名为 `html` 的文件，后缀名为 `html` 的文件最后上传
 > 3. 忽略后缀名为 `.DS_store` 的文件
 
-##### 4. 发布项目
+##### 3. 发布项目
 
 ```sh
 npx cdn-cli deploy production
