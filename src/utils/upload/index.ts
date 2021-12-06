@@ -1,8 +1,6 @@
-import aliyun from './aliyun'
-import qiniu from './qiniu'
-import tencent from './tencent'
-
-export type Types = 'aliyun' | 'qiniu' | 'tencent';
+import aliyun from './aliyun';
+import qiniu from './qiniu';
+import tencent from './tencent';
 
 interface Options {
   to: string;
@@ -10,19 +8,25 @@ interface Options {
   noCache: boolean;
 }
 
+enum Types {
+  Aliyun = 'aliyun',
+  Qiniu = 'qiniu',
+  Tencent = 'tencent',
+}
+
 export default async (type: Types, options: Options): Promise<void> => {
   switch (type) {
-    case 'aliyun': {
-      await aliyun(options)
-      break
+    case Types.Aliyun: {
+      await aliyun(options);
+      break;
     }
-    case 'qiniu': {
-      await qiniu(options)
-      break
+    case Types.Qiniu: {
+      await qiniu(options);
+      break;
     }
-    case 'tencent': {
-      await tencent(options)
-      break
+    case Types.Tencent: {
+      await tencent(options);
+      break;
     }
   }
-}
+};
