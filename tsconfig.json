@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "removeComments": true,
     "outDir": "lib",
-    "skipLibCheck": false,
+    "skipLibCheck": false
   },
   "exclude": ["node_modules/**/*"],
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "typings.d.ts"]
 }

@@ -6,65 +6,6 @@ import _ from 'lodash';
 import { logger } from '../utils';
 import { isFileSync } from '../utils/file';
 
-export enum Type {
-  Aliyun = 'aliyun',
-  Qiniu = 'qiniu',
-  Tencent = 'tencent',
-}
-
-export interface File {
-  from: string;
-  to: string;
-  isFile: boolean;
-  ignore: boolean;
-  lastUpload: boolean;
-  noCache: boolean;
-}
-
-export interface Rule {
-  from: string;
-  to: string;
-  ignore: string[];
-  noCache: string[];
-  lastUpload: string[];
-  files: File[];
-}
-
-export type Aliyun = {
-  type: Type.Aliyun;
-  region: string;
-  bucket: string;
-  accessKeyId: string;
-  accessKeySecret: string;
-};
-
-export type Qiniu = {
-  type: Type.Qiniu;
-  region: string;
-  bucket: string;
-  accessKey: string;
-  secretKey: string;
-};
-
-export type Tencent = {
-  type: Type.Tencent;
-  region: string;
-  bucket: string;
-  appId: string;
-  secretId: string;
-  secretKey: string;
-};
-
-export type Environment = Aliyun | Qiniu | Tencent;
-
-export interface Config {
-  rules: Rule[];
-  environment: Environment;
-  environments?: {
-    [k: string]: Environment;
-  };
-}
-
 const defaultConfig = (): Config => {
   return {
     ...require(path.resolve(process.cwd(), './cdn.config')),
@@ -129,55 +70,43 @@ const setFiles = async () => {
   });
 };
 
-const getProcessEnv = (environment, name) => {
-  return process.env[`${environment}_${name}`.toUpperCase()];
-};
-
 export const setConfig = async (environment) => {
   config.environment = config.environments[environment];
   if (config.environment) {
     delete config.environments;
     // 支持 Github
-    if (config.environment.type === Type.Aliyun) {
+    if (config.environment.type === Types.Aliyun) {
       const { region, bucket, accessKeyId, accessKeySecret } =
         config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : getProcessEnv(environment, 'region'),
-        bucket: bucket ? bucket : getProcessEnv(environment, 'bucket'),
-        accessKeyId: accessKeyId
-          ? accessKeyId
-          : getProcessEnv(environment, 'accessKeyId'),
+        region: region ? region : process.env.region,
+        bucket: bucket ? bucket : process.env.bucket,
+        accessKeyId: accessKeyId ? accessKeyId : process.env.accessKeyId,
         accessKeySecret: accessKeySecret
           ? accessKeySecret
-          : getProcessEnv(environment, 'accessKeySecret'),
+          : process.env.accessKeySecret,
       };
     }
-    if (config.environment.type === Type.Qiniu) {
+    if (config.environment.type === Types.Qiniu) {
       const { region, bucket, accessKey, secretKey } = config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : getProcessEnv(environment, 'region'),
-        bucket: bucket ? bucket : getProcessEnv(environment, 'bucket'),
-        accessKey: accessKey
-          ? accessKey
-          : getProcessEnv(environment, 'accessKey'),
-        secretKey: secretKey
-          ? secretKey
-          : getProcessEnv(environment, 'secretKey'),
+        region: region ? region : process.env.region,
+        bucket: bucket ? bucket : process.env.bucket,
+        accessKey: accessKey ? accessKey : process.env.accessKey,
+        secretKey: secretKey ? secretKey : process.env.secretKey,
       };
     }
-    if (config.environment.type === Type.Tencent) {
+    if (config.environment.type === Types.Tencent) {
       const { region, bucket, appId, secretId, secretKey } = config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : getProcessEnv(environment, 'region'),
-        bucket: bucket ? bucket : getProcessEnv(environment, 'bucket'),
-        appId: appId ? appId : getProcessEnv(environment, 'appId'),
-        secretId: secretId ? secretId : getProcessEnv(environment, 'secretId'),
-        secretKey: secretKey
-          ? secretKey
-          : getProcessEnv(environment, 'secretKey'),
+        region: region ? region : process.env.region,
+        bucket: bucket ? bucket : process.env.bucket,
+        appId: appId ? appId : process.env.appId,
+        secretId: secretId ? secretId : process.env.secretId,
+        secretKey: secretKey ? secretKey : process.env.secretKey,
       };
     }
   } else {
