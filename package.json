@@ -1,6 +1,6 @@
 {
   "name": "cdn-cli",
-  "version": "4.0.4",
+  "version": "4.1.0-rc.1",
   "description": "通过命令行上传文件到对象存储（支持阿里云、腾讯云、七牛云）",
   "scripts": {
     "prepare": "husky install",

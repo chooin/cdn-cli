@@ -6,6 +6,12 @@ import _ from 'lodash';
 import { logger } from '../utils';
 import { isFileSync } from '../utils/file';
 
+enum Types {
+  Aliyun = 'aliyun',
+  Qiniu = 'qiniu',
+  Tencent = 'tencent',
+}
+
 const defaultConfig = (): Config => {
   return {
     ...require(path.resolve(process.cwd(), './cdn.config')),

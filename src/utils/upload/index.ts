@@ -8,6 +8,12 @@ interface Options {
   noCache: boolean;
 }
 
+enum Types {
+  Aliyun = 'aliyun',
+  Qiniu = 'qiniu',
+  Tencent = 'tencent',
+}
+
 export default async (type: Types, options: Options): Promise<void> => {
   switch (type) {
     case Types.Aliyun: {
