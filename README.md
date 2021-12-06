@@ -7,7 +7,7 @@
 
 ##### 1. 初始化项目
 
-```sh
+```shell
 npx cdn-cli init
 ```
 
