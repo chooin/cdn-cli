@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { logger } from '../utils';
 import { isFileSync } from '../utils/file';
 
-enum Types {
+export enum Types {
   Aliyun = 'aliyun',
   Qiniu = 'qiniu',
   Tencent = 'tencent',
