@@ -1,17 +1,12 @@
 import aliyun from './aliyun';
 import qiniu from './qiniu';
 import tencent from './tencent';
+import { Types } from '../../config';
 
 interface Options {
   to: string;
   from: string;
   noCache: boolean;
-}
-
-enum Types {
-  Aliyun = 'aliyun',
-  Qiniu = 'qiniu',
-  Tencent = 'tencent',
 }
 
 export default async (type: Types, options: Options): Promise<void> => {
