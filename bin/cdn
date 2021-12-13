@@ -1,37 +1,42 @@
 #!/usr/bin/env node
 
-const program = require('commander')
-const kleur = require('kleur')
-const { resolve } = require('path')
+const program = require('commander');
+const kleur = require('kleur');
+const { resolve } = require('path');
+const pkg = require('../package.json');
 
-program
-  .version('4.0.0')
+program.version(pkg.version);
 
 program
   .command('init')
   .description(kleur.yellow('初始化'))
   .action(() => {
-    require('../lib/utils/file').canCopyFile(resolve('./cdn.config.js')).then(() => {
-      require('../lib/utils/file')
-        .copyFileSync(resolve(__dirname, '../templates/cdn.config.js'), resolve('./cdn.config.js'))
-    }).catch(() => {
-      console.log('cdn.config.js 文件已存在')
-    })
-  })
+    require('../lib/utils/file')
+      .canCopyFile(resolve('./cdn.config.js'))
+      .then(() => {
+        require('../lib/utils/file').copyFileSync(
+          resolve(__dirname, '../templates/cdn.config.js'),
+          resolve('./cdn.config.js'),
+        );
+      })
+      .catch(() => {
+        console.log('cdn.config.js 文件已存在');
+      });
+  });
 
 program
   .command('deploy <environment>')
   .description(kleur.yellow('上传资源'))
-  .action(environment => {
-    require('../lib').deploy(environment)
-  })
+  .action((environment) => {
+    require('../lib').deploy(environment);
+  });
 
 program.on('--help', () => {
-  console.log()
-  console.log('  例子:')
-  console.log()
-  console.log('    $ cdn init')
-  console.log('    $ cdn deploy development')
-})
+  console.log();
+  console.log('  例子:');
+  console.log();
+  console.log('    $ cdn init');
+  console.log('    $ cdn deploy development');
+});
 
-program.parse(process.argv)
+program.parse(process.argv);
