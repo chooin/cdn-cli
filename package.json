@@ -1,10 +1,11 @@
 {
   "name": "cdn-cli",
-  "version": "4.1.2",
+  "version": "5.0.0-beta.4",
   "description": "通过命令行上传文件到对象存储（支持阿里云、腾讯云、七牛云）",
   "scripts": {
-    "prepare": "husky install",
-    "build": "tsc"
+    "build": "tsc",
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky install"
   },
   "license": "MIT",
   "bin": {

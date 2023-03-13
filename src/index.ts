@@ -1,7 +1,7 @@
 import { setConfig, config } from './config';
 import { upload } from './utils';
 
-const deploy = async (environment) => {
+const deploy = async (environment): Promise<any> => {
   await setConfig(environment);
 
   console.log(
@@ -12,14 +12,11 @@ const deploy = async (environment) => {
 
   let files: File[] = config.rules.map((rule) => rule.files).flat();
 
-  await Promise.all(
+  return Promise.all(
     files
-      .filter((file) => !file.isLastUpload)
-      .map((file) => upload(config.environment.type, files)),
-  );
-  await Promise.all(
-    files
-      .filter((file) => file.isLastUpload)
+      .sort((a, b) =>
+        a.isLastUpload === a.isLastUpload ? 0 : a.isLastUpload ? 1 : -1,
+      )
       .map((file) => upload(config.environment.type, files)),
   );
 };

@@ -1,13 +1,14 @@
-import * as path from 'path';
+import path from 'path';
 import glob from 'glob';
 import dirGlob from 'dir-glob';
 import minimatch from 'minimatch';
 import _ from 'lodash';
-import { logger } from '../utils';
 import fs from 'fs-extra';
+import { logger } from '../utils';
+import { Types } from '../enums';
 
 const defaultConfig = (): Config => {
-  const configPath = path.resolve(process.cwd(), './cdn.config');
+  const configPath = path.resolve(process.cwd(), './cdn.config.js');
   if (fs.statSync(configPath).isFile()) {
     return require(configPath);
   } else {
@@ -19,13 +20,21 @@ const defaultConfig = (): Config => {
 
 export const config = defaultConfig();
 
-const walk = (from, ignore: string[] = []): Promise<string[]> => {
-  if (fs.statSync(path.resolve(from)).isFile()) {
-    return Promise.resolve([from]);
-  }
-  return glob(from, {
-    ignore,
-  });
+const walk = (from: string, ignore: string[] = []): Promise<string[]> => {
+  return fs
+    .stat(path.resolve(from))
+    .then((stats) => {
+      if (stats.isFile()) {
+        return [from];
+      } else {
+        return [];
+      }
+    })
+    .catch(() => {
+      return glob(from, {
+        ignore,
+      });
+    });
 };
 
 // 配置 rules 的 files
@@ -101,7 +110,7 @@ export const setConfig = async (environment) => {
       };
     }
   } else {
-    logger.error('错误，请检查 cdn.config.js 中 environment 是否存在');
+    logger.error('请检查 cdn.config.js 文件中 environment 是否存在');
     process.exit(1);
   }
   config.rules = config.rules

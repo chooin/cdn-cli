@@ -1,6 +1,7 @@
 import Aliyun from './aliyun';
 import Qiniu from './qiniu';
 import Tencent from './tencent';
+import { Types } from '../../enums';
 import { config } from '../../config';
 
 export const upload = (type: Types, files: File[]): Promise<void> => {
