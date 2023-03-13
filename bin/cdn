@@ -1,32 +1,34 @@
 #!/usr/bin/env node
 
-const program = require('commander');
-const kleur = require('kleur');
-const { resolve } = require('path');
+const { Command } = require('commander');
+const { yellow, red } = require('kleur');
+const path = require('path');
 const pkg = require('../package.json');
+
+const program = new Command();
 
 program.version(pkg.version);
 
 program
-  .command('init')
-  .description(kleur.yellow('初始化'))
+  .name('init')
+  .description(yellow('初始化'))
   .action(() => {
     require('../lib/utils/file')
-      .canCopyFile(resolve('./cdn.config.js'))
+      .canCopyFile(path.resolve('./cdn.config.js'))
       .then(() => {
         require('../lib/utils/file').copyFileSync(
-          resolve(__dirname, '../templates/cdn.config.js'),
-          resolve('./cdn.config.js'),
+          path.resolve(__dirname, '../templates/cdn.config.js'),
+          path.resolve('./cdn.config.js'),
         );
       })
       .catch(() => {
-        console.log('cdn.config.js 文件已存在');
+        red('cdn.config.js 文件已存在');
       });
   });
 
 program
   .command('deploy <environment>')
-  .description(kleur.yellow('上传资源'))
+  .description(yellow('上传资源'))
   .action((environment) => {
     require('../lib').deploy(environment);
   });

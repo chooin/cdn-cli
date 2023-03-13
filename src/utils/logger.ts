@@ -1,35 +1,27 @@
-import {red, yellow, green, white, Color} from 'kleur'
+import { red, yellow, green, Color } from 'kleur';
 
 type Messages = string | string[];
 type Options = {
   inline: boolean;
 };
 
-export const uploadSuccess = ({
-  from,
-  to,
-  noCache
-}) => {
-  const status = green('[成功]'.padEnd(16))
-  noCache = noCache
+export const uploadSuccess = (file: Omit<File, 'isLastUpload'>) => {
+  const status = green('[失败]'.padEnd(16));
+  const isNoCache = file.isNoCache
     ? yellow('[不支持]'.padEnd(15))
-    : '[支持]'.padEnd(16)
-  const arrow = yellow(' -> ')
-  console.log(`${status}${noCache}${from}${arrow}/${to}`)
-}
+    : '[支持]'.padEnd(16);
+  const arrow = yellow(' -> ');
+  console.log(`${status}${isNoCache}${file.from}${arrow}/${file.to}`);
+};
 
-export const uploadFail = ({
-  from,
-  to,
-  noCache
-}) => {
-  const status = red('[失败]'.padEnd(16))
-  noCache = noCache
+export const uploadFail = (file: Omit<File, 'isLastUpload'>) => {
+  const status = red('[失败]'.padEnd(16));
+  const isNoCache = file.isNoCache
     ? yellow('[不支持]'.padEnd(15))
-    : '[支持]'.padEnd(16)
-  const arrow = yellow(' -> ')
-  console.log(`${status}${noCache}${from}${arrow}/${to}`)
-}
+    : '[支持]'.padEnd(16);
+  const arrow = yellow(' -> ');
+  console.log(`${status}${isNoCache}${file.from}${arrow}/${file.to}`);
+};
 
 const kleur = (messages: Messages, color: Color, options?: Options) => {
   if (Array.isArray(messages)) {
@@ -43,22 +35,6 @@ const kleur = (messages: Messages, color: Color, options?: Options) => {
   } else {
     console.log(color(messages));
   }
-};
-
-export const log = (messages: Messages, options?: Options) => {
-  kleur(messages, white, options);
-};
-
-export const info = (messages: Messages, options?: Options) => {
-  kleur(messages, white, options);
-};
-
-export const success = (messages: Messages, options?: Options) => {
-  kleur(messages, green, options);
-};
-
-export const warning = (messages: Messages, options?: Options) => {
-  kleur(messages, yellow, options);
 };
 
 export const error = (messages: Messages, options?: Options) => {

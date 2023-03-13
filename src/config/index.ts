@@ -4,56 +4,42 @@ import dirGlob from 'dir-glob';
 import minimatch from 'minimatch';
 import _ from 'lodash';
 import { logger } from '../utils';
-import { isFileSync } from '../utils/file';
-
-export enum Types {
-  Aliyun = 'aliyun',
-  Qiniu = 'qiniu',
-  Tencent = 'tencent',
-}
+import fs from 'fs-extra';
 
 const defaultConfig = (): Config => {
-  return {
-    ...require(path.resolve(process.cwd(), './cdn.config')),
-  };
+  const configPath = path.resolve(process.cwd(), './cdn.config');
+  if (fs.statSync(configPath).isFile()) {
+    return require(configPath);
+  } else {
+    logger.error(
+      '请先执行 npx cdn-cli init 获取配置文件，并配置 cdn.config.js 文件',
+    );
+  }
 };
 
 export const config = defaultConfig();
 
-/**
- * 遍历目录
- * @param {string} from
- */
-const walk = (from): Promise<string[]> => {
-  return new Promise((resolve) => {
-    glob(from, {}, (err, matches) => {
-      if (err) {
-        logger.error(err.message);
-        process.exit(1);
-      }
-      resolve(matches);
-    });
+const walk = (from, ignore: string[] = []): Promise<string[]> => {
+  if (fs.statSync(path.resolve(from)).isFile()) {
+    return Promise.resolve([from]);
+  }
+  return glob(from, {
+    ignore,
   });
 };
 
 // 配置 rules 的 files
-const setFiles = async () => {
-  await Promise.all(config.rules.map((rule) => walk(rule.from))).then((res) => {
+const setFiles = () => {
+  return Promise.all(
+    config.rules.map((rule) => walk(rule.from, rule.ignore)),
+  ).then((res) => {
     res.map((files, index) => {
-      config.rules[index].files = files.map((file) => {
-        const fullPath = path.resolve('.', file);
-        // 判断是不是文件
-        const isFile = isFileSync(fullPath);
-        // ignore 处理
-        const ignore = config.rules[index].ignore.some((i) =>
+      return files.map((file) => {
+        const from = path.resolve('.', file);
+        const isLastUpload = config.rules[index].lastUpload.some((i) =>
           minimatch(file, i),
         );
-        // lastUpload 处理
-        const lastUpload = config.rules[index].lastUpload.some((i) =>
-          minimatch(file, i),
-        );
-        // noCache 处理
-        const noCache = config.rules[index].noCache.some((i) =>
+        const isNoCache = config.rules[index].noCache.some((i) =>
           minimatch(file, i),
         );
         let to = path.join(
@@ -64,14 +50,13 @@ const setFiles = async () => {
           to.replace('/', '');
         }
         return {
-          from: fullPath,
+          from,
           to,
-          isFile,
-          ignore,
-          lastUpload,
-          noCache,
+
+          isLastUpload,
+          isNoCache,
         };
-      }) as File[];
+      });
     });
   });
 };
@@ -120,13 +105,7 @@ export const setConfig = async (environment) => {
     process.exit(1);
   }
   config.rules = config.rules
-    .filter((item) => {
-      if (item.from && item.to) {
-        return true;
-      }
-      logger.error('错误，必须配置 from 和 to');
-      process.exit(1);
-    })
+    .filter((item) => item.from && item.to)
     .map(({ from, to, ignore, lastUpload, noCache, ...args }) => {
       return {
         ...args,

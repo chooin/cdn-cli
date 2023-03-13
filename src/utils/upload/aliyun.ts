@@ -1,40 +1,44 @@
 import Oss from 'ali-oss';
+import type { PutObjectOptions } from 'ali-oss';
 import * as logger from '../logger';
-import { config } from '../../config';
+import OSS from 'ali-oss';
 
-export default ({ from, to, noCache }): Promise<void> => {
-  return new Promise((resolve) => {
-    const { region, bucket, accessKeyId, accessKeySecret } =
-      config.environment as Environment.Aliyun;
-    const client = new Oss({
-      region,
-      bucket,
-      accessKeyId,
-      accessKeySecret,
+class Aliyun {
+  private client: OSS;
+
+  constructor(environment: Environment.Aliyun) {
+    this.client = new Oss({
+      region: environment.region,
+      bucket: environment.bucket,
+      accessKeyId: environment.accessKeyId,
+      accessKeySecret: environment.accessKeySecret,
     });
-    const options = noCache
-      ? {
-          headers: {
-            'Cache-Control': 'no-cache, private',
-          },
+  }
+
+  private put(file: File): Promise<void> {
+    return new Promise((resolve) => {
+      const putObjectOptions: PutObjectOptions = file.isNoCache
+        ? {
+            headers: {
+              'Cache-Control': 'no-cache',
+            },
+          }
+        : {};
+      this.client.put(file.to, file.from, putObjectOptions).then((result) => {
+        if (result.res.status === 200) {
+          logger.uploadSuccess(file);
+          return resolve();
         }
-      : {};
-    client.put(to, from, options).then((result) => {
-      if (result?.res?.status !== 200) {
-        logger.uploadFail({
-          from,
-          to,
-          noCache,
-        });
+        logger.uploadFail(file);
         console.log(result);
         process.exit(1);
-      }
-      logger.uploadSuccess({
-        from,
-        to,
-        noCache,
       });
-      resolve();
     });
-  });
-};
+  }
+
+  public upload(files: File[]): Promise<void> {
+    return Promise.all(files.map((file) => this.put(file))).then(() => {});
+  }
+}
+
+export default Aliyun;
