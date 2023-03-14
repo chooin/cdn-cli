@@ -38,34 +38,38 @@ const walk = (from: string, ignore: string[] = []): Promise<string[]> => {
 };
 
 // 配置 rules 的 files
-const setFiles = () => {
-  return Promise.all(
+const setFiles = async () => {
+  await Promise.all(
     config.rules.map((rule) => walk(rule.from, rule.ignore)),
   ).then((res) => {
     res.map((files, index) => {
-      return files.map((file) => {
-        const from = path.resolve('.', file);
-        const isLastUpload = config.rules[index].lastUpload.some((i) =>
-          minimatch(file, i),
-        );
-        const isNoCache = config.rules[index].noCache.some((i) =>
-          minimatch(file, i),
-        );
-        let to = path.join(
-          config.rules[index].to,
-          file.replace(path.dirname(config.rules[index].from), ''),
-        );
-        if (to.indexOf('/') === 0) {
-          to.replace('/', '');
-        }
-        return {
-          from,
-          to,
+      config.rules[index].files = files
+        .filter((file) => {
+          return fs.statSync(path.resolve('.', file)).isFile();
+        })
+        .map((file) => {
+          const from = path.resolve('.', file);
+          const isLastUpload = config.rules[index].lastUpload.some((i) =>
+            minimatch(file, i),
+          );
+          const isNoCache = config.rules[index].noCache.some((i) =>
+            minimatch(file, i),
+          );
+          let to = path.join(
+            config.rules[index].to,
+            file.replace(path.dirname(config.rules[index].from), ''),
+          );
+          if (to.indexOf('/') === 0) {
+            to.replace('/', '');
+          }
+          return {
+            from,
+            to,
 
-          isLastUpload,
-          isNoCache,
-        };
-      });
+            isLastUpload,
+            isNoCache,
+          };
+        }) as File[];
     });
   });
 };
@@ -76,37 +80,32 @@ export const setConfig = async (environment) => {
     delete config.environments;
     // 支持 Github
     if (config.environment.type === Types.Aliyun) {
-      const { region, bucket, accessKeyId, accessKeySecret } =
-        config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : process.env.region,
-        bucket: bucket ? bucket : process.env.bucket,
-        accessKeyId: accessKeyId ? accessKeyId : process.env.accessKeyId,
-        accessKeySecret: accessKeySecret
-          ? accessKeySecret
-          : process.env.accessKeySecret,
+        region: config.environment.region ?? process.env.region,
+        bucket: config.environment.bucket ?? process.env.bucket,
+        accessKeyId: config.environment.accessKeyId ?? process.env.accessKeyId,
+        accessKeySecret:
+          config.environment.accessKeySecret ?? process.env.accessKeySecret,
       };
     }
     if (config.environment.type === Types.Qiniu) {
-      const { region, bucket, accessKey, secretKey } = config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : process.env.region,
-        bucket: bucket ? bucket : process.env.bucket,
-        accessKey: accessKey ? accessKey : process.env.accessKey,
-        secretKey: secretKey ? secretKey : process.env.secretKey,
+        region: config.environment.region ?? process.env.region,
+        bucket: config.environment.bucket ?? process.env.bucket,
+        accessKey: config.environment.accessKey ?? process.env.accessKey,
+        secretKey: config.environment.secretKey ?? process.env.secretKey,
       };
     }
     if (config.environment.type === Types.Tencent) {
-      const { region, bucket, appId, secretId, secretKey } = config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : process.env.region,
-        bucket: bucket ? bucket : process.env.bucket,
-        appId: appId ? appId : process.env.appId,
-        secretId: secretId ? secretId : process.env.secretId,
-        secretKey: secretKey ? secretKey : process.env.secretKey,
+        region: config.environment.region ?? process.env.region,
+        bucket: config.environment.bucket ?? process.env.bucket,
+        appId: config.environment.appId ?? process.env.appId,
+        secretId: config.environment.secretId ?? process.env.secretId,
+        secretKey: config.environment.secretKey ?? process.env.secretKey,
       };
     }
   } else {

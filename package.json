@@ -1,6 +1,6 @@
 {
   "name": "cdn-cli",
-  "version": "5.0.0-beta.4",
+  "version": "5.0.0",
   "description": "通过命令行上传文件到对象存储（支持阿里云、腾讯云、七牛云）",
   "scripts": {
     "build": "tsc",
