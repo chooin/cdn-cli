@@ -1,10 +1,9 @@
 import Cos from 'cos-nodejs-sdk-v5';
-import type COS from 'cos-nodejs-sdk-v5';
 import fs from 'fs-extra';
 import * as logger from '../logger';
 
 class Tencent {
-  private client: COS;
+  private client: Cos;
   private readonly bucket: string;
   private readonly region: string;
 

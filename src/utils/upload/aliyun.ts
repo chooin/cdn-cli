@@ -1,10 +1,9 @@
 import Oss from 'ali-oss';
 import type { PutObjectOptions } from 'ali-oss';
 import * as logger from '../logger';
-import OSS from 'ali-oss';
 
 class Aliyun {
-  private client: OSS;
+  private client: Oss;
 
   constructor(environment: Environment.Aliyun) {
     this.client = new Oss({

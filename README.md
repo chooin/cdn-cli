@@ -27,10 +27,10 @@ module.exports = {
   environments: {
     production: {
       type: 'aliyun',
-      region: '',
-      bucket: '',
-      accessKeyId: '',
-      accessKeySecret: '',
+      region: 'oss-cn-hangzhou',
+      bucket: 'xxx',
+      accessKeyId: 'xxx',
+      accessKeySecret: 'xxx',
     },
     testing: {
       type: 'qiniu',
