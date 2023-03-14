@@ -51,16 +51,16 @@ module.exports = {
 };
 ```
 
-| 字段             | 类型     | 详情               |
-| ---------------- | -------- | ------------------ |
-| rules.from       | string   | 需要上传的资源目录 |
-| rules.to         | string   | 上传目标目录       |
-| rules.ignore     | string[] | 过滤文件或目录     |
-| rules.noCache    | string[] | 是否               |
-| rules.lastUpload | string[] | 是否               |
-| environments     | object[] | 环境               |
+| 字段             | 类型     | 详情                 |
+| ---------------- | -------- | -------------------- |
+| rules.from       | string   | 需要上传的资源目录   |
+| rules.to         | string   | 上传目标目录         |
+| rules.ignore     | string[] | 过滤文件或目录       |
+| rules.noCache    | string[] | 不缓存的文件或目录   |
+| rules.lastUpload | string[] | 最后上传的文件或目录 |
+| environments     | object[] | 环境                 |
 
-当配置文件的参数不存在时会取 `process.env` 中的值，如：`production` 中的 `region` 值不存在，则自动从 `process.env.region` 中获取
+当配置文件的参数不存在时会取 `process.env` 中的值，如：`production` 中的 `region` 值不存在，则从 `process.env.region` 中获取
 
 ##### 3. 发布项目
 
