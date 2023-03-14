@@ -1,27 +1,21 @@
-import aliyun from './aliyun';
-import qiniu from './qiniu';
-import tencent from './tencent';
-import { Types } from '../../config';
+import Aliyun from './aliyun';
+import Qiniu from './qiniu';
+import Tencent from './tencent';
+import { Types } from '../../enums';
+import { config } from '../../config';
 
-interface Options {
-  to: string;
-  from: string;
-  noCache: boolean;
-}
-
-export default async (type: Types, options: Options): Promise<void> => {
+export const upload = (type: Types, files: File[]): Promise<void> => {
   switch (type) {
     case Types.Aliyun: {
-      await aliyun(options);
-      break;
+      return new Aliyun(config.environment as Environment.Aliyun).upload(files);
     }
     case Types.Qiniu: {
-      await qiniu(options);
-      break;
+      return new Qiniu(config.environment as Environment.Qiniu).upload(files);
     }
     case Types.Tencent: {
-      await tencent(options);
-      break;
+      return new Tencent(config.environment as Environment.Tencent).upload(
+        files,
+      );
     }
   }
 };

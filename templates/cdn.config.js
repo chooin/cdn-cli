@@ -3,16 +3,10 @@ module.exports = {
     {
       from: 'dist',
       to: '.',
-      ignore: [
-        '**/.DS_store',
-      ],
-      noCache: [
-        '**/*.html'
-      ],
-      lastUpload: [
-        '**/*.html'
-      ],
-    }
+      ignore: ['**/.DS_store'],
+      noCache: ['**/*.html'],
+      lastUpload: ['**/*.html'],
+    },
   ],
   environments: {
     production: {
@@ -36,6 +30,6 @@ module.exports = {
       appId: '',
       secretId: '',
       secretKey: '',
-    }
-  }
-}
+    },
+  },
+};

@@ -1,36 +1,25 @@
-import {setConfig, config} from './config'
-import _ from 'lodash'
-import {upload} from './utils'
+import { setConfig, config } from './config';
+import { upload } from './utils';
 
-const deploy = async (environment) => {
-  await setConfig(environment)
+const deploy = async (environment): Promise<any> => {
+  await setConfig(environment);
 
-  // 删除目录
-  config.rules = config.rules.map((rule) => {
-    return {
-      ...rule,
-      files: rule.files
-      .filter((file) => file.isFile)
-    }
-  })
+  console.log(
+    `${'状态'.padStart(4)}${'缓存'.padStart(
+      8,
+    )}${'本地资源 -> 远端资源'.padStart(16)}`,
+  );
 
-  // 删除 ignore
-  config.rules = config.rules.map((rule) => {
-    return {
-      ...rule,
-      files: rule.files
-        .filter((file) => !file.ignore)
-    }
-  })
+  let files: File[] = config.rules.map((rule) => rule.files).flat();
 
-  console.log(`${'状态'.padStart(4)}${'缓存'.padStart(16)}${'本地资源 -> 远端资源'.padStart(24)}`)
+  await upload(
+    config.environment.type,
+    files.filter((file) => !file.isLastUpload),
+  );
+  await upload(
+    config.environment.type,
+    files.filter((file) => file.isLastUpload),
+  );
+};
 
-  let files = _.flatten([...config.rules.map(({files}) => files)])
-
-  await Promise.all(files.filter((file) => !file.lastUpload).map((file) => upload(config.environment.type, file)))
-  await Promise.all(files.filter((file) => file.lastUpload).map((file) => upload(config.environment.type, file)))
-}
-
-export {
-  deploy
-}
+export { deploy };

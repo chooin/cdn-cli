@@ -15,10 +15,8 @@ declare interface Config {
 declare interface File {
   from: string;
   to: string;
-  isFile: boolean;
-  ignore: boolean;
-  lastUpload: boolean;
-  noCache: boolean;
+  isLastUpload: boolean;
+  isNoCache: boolean;
 }
 
 declare interface Rule {
@@ -38,6 +36,7 @@ declare namespace Environment {
     accessKeyId: string;
     accessKeySecret: string;
   };
+
   type Qiniu = {
     type: Types.Qiniu;
     region: string;
@@ -45,6 +44,7 @@ declare namespace Environment {
     accessKey: string;
     secretKey: string;
   };
+
   type Tencent = {
     type: Types.Tencent;
     region: string;

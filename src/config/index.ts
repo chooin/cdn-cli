@@ -1,77 +1,75 @@
-import * as path from 'path';
+import path from 'path';
 import glob from 'glob';
 import dirGlob from 'dir-glob';
 import minimatch from 'minimatch';
 import _ from 'lodash';
+import fs from 'fs-extra';
 import { logger } from '../utils';
-import { isFileSync } from '../utils/file';
-
-export enum Types {
-  Aliyun = 'aliyun',
-  Qiniu = 'qiniu',
-  Tencent = 'tencent',
-}
+import { Types } from '../enums';
 
 const defaultConfig = (): Config => {
-  return {
-    ...require(path.resolve(process.cwd(), './cdn.config')),
-  };
+  const configPath = path.resolve(process.cwd(), './cdn.config.js');
+  if (fs.statSync(configPath).isFile()) {
+    return require(configPath);
+  } else {
+    logger.error(
+      '请先执行 npx cdn-cli init 获取配置文件，并配置 cdn.config.js 文件',
+    );
+  }
 };
 
 export const config = defaultConfig();
 
-/**
- * 遍历目录
- * @param {string} from
- */
-const walk = (from): Promise<string[]> => {
-  return new Promise((resolve) => {
-    glob(from, {}, (err, matches) => {
-      if (err) {
-        logger.error(err.message);
-        process.exit(1);
+const walk = (from: string, ignore: string[] = []): Promise<string[]> => {
+  return fs
+    .stat(path.resolve(from))
+    .then((stats) => {
+      if (stats.isFile()) {
+        return [from];
+      } else {
+        return [];
       }
-      resolve(matches);
+    })
+    .catch(() => {
+      return glob(from, {
+        ignore,
+      });
     });
-  });
 };
 
 // 配置 rules 的 files
 const setFiles = async () => {
-  await Promise.all(config.rules.map((rule) => walk(rule.from))).then((res) => {
+  await Promise.all(
+    config.rules.map((rule) => walk(rule.from, rule.ignore)),
+  ).then((res) => {
     res.map((files, index) => {
-      config.rules[index].files = files.map((file) => {
-        const fullPath = path.resolve('.', file);
-        // 判断是不是文件
-        const isFile = isFileSync(fullPath);
-        // ignore 处理
-        const ignore = config.rules[index].ignore.some((i) =>
-          minimatch(file, i),
-        );
-        // lastUpload 处理
-        const lastUpload = config.rules[index].lastUpload.some((i) =>
-          minimatch(file, i),
-        );
-        // noCache 处理
-        const noCache = config.rules[index].noCache.some((i) =>
-          minimatch(file, i),
-        );
-        let to = path.join(
-          config.rules[index].to,
-          file.replace(path.dirname(config.rules[index].from), ''),
-        );
-        if (to.indexOf('/') === 0) {
-          to.replace('/', '');
-        }
-        return {
-          from: fullPath,
-          to,
-          isFile,
-          ignore,
-          lastUpload,
-          noCache,
-        };
-      }) as File[];
+      config.rules[index].files = files
+        .filter((file) => {
+          return fs.statSync(path.resolve('.', file)).isFile();
+        })
+        .map((file) => {
+          const from = path.resolve('.', file);
+          const isLastUpload = config.rules[index].lastUpload.some((i) =>
+            minimatch(file, i),
+          );
+          const isNoCache = config.rules[index].noCache.some((i) =>
+            minimatch(file, i),
+          );
+          let to = path.join(
+            config.rules[index].to,
+            file.replace(path.dirname(config.rules[index].from), ''),
+          );
+          if (to.indexOf('/') === 0) {
+            to.replace('/', '');
+          }
+          return {
+            from,
+            to,
+
+            isLastUpload,
+            isNoCache,
+          };
+        }) as File[];
     });
   });
 };
@@ -82,51 +80,40 @@ export const setConfig = async (environment) => {
     delete config.environments;
     // 支持 Github
     if (config.environment.type === Types.Aliyun) {
-      const { region, bucket, accessKeyId, accessKeySecret } =
-        config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : process.env.region,
-        bucket: bucket ? bucket : process.env.bucket,
-        accessKeyId: accessKeyId ? accessKeyId : process.env.accessKeyId,
-        accessKeySecret: accessKeySecret
-          ? accessKeySecret
-          : process.env.accessKeySecret,
+        region: config.environment.region ?? process.env.region,
+        bucket: config.environment.bucket ?? process.env.bucket,
+        accessKeyId: config.environment.accessKeyId ?? process.env.accessKeyId,
+        accessKeySecret:
+          config.environment.accessKeySecret ?? process.env.accessKeySecret,
       };
     }
     if (config.environment.type === Types.Qiniu) {
-      const { region, bucket, accessKey, secretKey } = config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : process.env.region,
-        bucket: bucket ? bucket : process.env.bucket,
-        accessKey: accessKey ? accessKey : process.env.accessKey,
-        secretKey: secretKey ? secretKey : process.env.secretKey,
+        region: config.environment.region ?? process.env.region,
+        bucket: config.environment.bucket ?? process.env.bucket,
+        accessKey: config.environment.accessKey ?? process.env.accessKey,
+        secretKey: config.environment.secretKey ?? process.env.secretKey,
       };
     }
     if (config.environment.type === Types.Tencent) {
-      const { region, bucket, appId, secretId, secretKey } = config.environment;
       config.environment = {
         ...config.environment,
-        region: region ? region : process.env.region,
-        bucket: bucket ? bucket : process.env.bucket,
-        appId: appId ? appId : process.env.appId,
-        secretId: secretId ? secretId : process.env.secretId,
-        secretKey: secretKey ? secretKey : process.env.secretKey,
+        region: config.environment.region ?? process.env.region,
+        bucket: config.environment.bucket ?? process.env.bucket,
+        appId: config.environment.appId ?? process.env.appId,
+        secretId: config.environment.secretId ?? process.env.secretId,
+        secretKey: config.environment.secretKey ?? process.env.secretKey,
       };
     }
   } else {
-    logger.error('错误，请检查 cdn.config.js 中 environment 是否存在');
+    logger.error('请检查 cdn.config.js 文件中 environment 是否存在');
     process.exit(1);
   }
   config.rules = config.rules
-    .filter((item) => {
-      if (item.from && item.to) {
-        return true;
-      }
-      logger.error('错误，必须配置 from 和 to');
-      process.exit(1);
-    })
+    .filter((item) => item.from && item.to)
     .map(({ from, to, ignore, lastUpload, noCache, ...args }) => {
       return {
         ...args,
