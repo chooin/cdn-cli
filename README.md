@@ -19,7 +19,7 @@ module.exports = {
     {
       from: 'dist',
       to: '.',
-      ignore: ['**/.DS_store'],
+      ignore: ['**/*.map', '**/.DS_store'],
       noCache: ['**/*.html'],
       lastUpload: ['**/*.html'],
     },
