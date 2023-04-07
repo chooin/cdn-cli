@@ -19,7 +19,7 @@ class Aliyun {
       const putObjectOptions: PutObjectOptions = file.isNoCache
         ? {
             headers: {
-              'Cache-Control': 'no-cache',
+              'Cache-Control': 'no-cache, private',
             },
           }
         : {};

@@ -25,7 +25,7 @@ class Tencent {
           Key: file.to,
           Body: fs.createReadStream(file.from),
           ContentLength: fs.statSync(file.from).size,
-          CacheControl: file.isNoCache ? 'no-cache' : undefined,
+          CacheControl: file.isNoCache ? 'no-cache, private' : undefined,
         },
         (_, data) => {
           if (data.statusCode === 200) {
