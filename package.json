@@ -20,7 +20,7 @@
     "glob": "^9.3.1",
     "kleur": "^4.1.4",
     "lodash": "^4.17.21",
-    "minimatch": "^7.4.2",
+    "minimatch": "^9.0.0",
     "qiniu": "^7.4.0"
   },
   "devDependencies": {
