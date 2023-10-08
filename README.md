@@ -1,4 +1,4 @@
-# 通过命令行上传文件到对象存储（支持阿里云、腾讯云、七牛云）
+# 通过命令行将文件上传至对象存储，支持阿里云、腾讯云以及七牛云
 
 [![npm package](https://img.shields.io/npm/v/cdn-cli.svg)](https://www.npmjs.org/package/cdn-cli)
 [![npm](https://img.shields.io/npm/dt/cdn-cli.svg?style=flat-square)](https://www.npmjs.com/package/cdn-cli)
@@ -60,7 +60,7 @@ module.exports = {
 | rules.lastUpload | string[] | 最后上传的文件或目录 |
 | environments     | object[] | 环境                 |
 
-当配置文件的参数不存在时会取 `process.env` 中的值，如：`production` 中的 `region` 值不存在，则从 `process.env.region` 中获取
+如果配置文件的参数不存在，系统将从 `process.env` 中获取值。例如，如果 `production` 中的 `region` 值不存在，系统将从 `process.env.region` 中提取。
 
 ##### 3. 发布项目
 

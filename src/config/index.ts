@@ -13,7 +13,7 @@ const defaultConfig = (): Config => {
     return require(configPath);
   } else {
     logger.error(
-      '请先执行 npx cdn-cli init 获取配置文件，并配置 cdn.config.js 文件',
+      '请首先运行 npx cdn-cli init 来获取配置文件，然后进行 cdn.config.js 文件的配置',
     );
   }
 };
@@ -109,7 +109,7 @@ export const setConfig = async (environment) => {
       };
     }
   } else {
-    logger.error('请检查 cdn.config.js 文件中 environment 是否存在');
+    logger.error('请确认 cdn.config.js 文件中是否包含 environment');
     process.exit(1);
   }
   config.rules = config.rules
