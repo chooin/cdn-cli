@@ -1,4 +1,4 @@
-import { red, yellow, green } from 'kleur';
+import { red, yellow, green, white } from 'kleur';
 
 export const uploadSuccess = (file: Omit<File, 'isLastUpload'>) => {
   const status = green('[成功]'.padEnd(8));
@@ -19,5 +19,5 @@ export const uploadFail = (file: Omit<File, 'isLastUpload'>) => {
 };
 
 export const error = (message: string) => {
-  red(message);
+  console.log(white().bgRed(message));
 };
