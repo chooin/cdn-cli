@@ -12,9 +12,10 @@ const defaultConfig = (): Config => {
   if (fs.existsSync(configPath) && fs.statSync(configPath).isFile()) {
     return require(configPath);
   } else {
-    throw new Error(
+    logger.error(
       '请首先运行 npx cdn-cli init 来获取配置文件，然后进行 cdn.config.js 文件的配置',
     );
+    process.exit(1);
   }
 };
 
