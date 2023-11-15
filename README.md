@@ -31,6 +31,7 @@ module.exports = {
       bucket: 'xxx',
       accessKeyId: 'xxx',
       accessKeySecret: 'xxx',
+      domain: 'https://xxx.xxx.com',
     },
     testing: {
       type: 'qiniu',
@@ -38,6 +39,7 @@ module.exports = {
       bucket: '',
       accessKey: '',
       secretKey: '',
+      domain: '',
     },
     development: {
       type: 'tencent',
@@ -46,6 +48,7 @@ module.exports = {
       appId: '',
       secretId: '',
       secretKey: '',
+      domain: '',
     },
   },
 };

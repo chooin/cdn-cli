@@ -35,6 +35,7 @@ declare namespace Environment {
     bucket: string;
     accessKeyId: string;
     accessKeySecret: string;
+    domain: string;
   };
 
   type Qiniu = {
@@ -43,6 +44,7 @@ declare namespace Environment {
     bucket: string;
     accessKey: string;
     secretKey: string;
+    domain: string;
   };
 
   type Tencent = {
@@ -52,5 +54,6 @@ declare namespace Environment {
     appId: string;
     secretId: string;
     secretKey: string;
+    domain: string;
   };
 }

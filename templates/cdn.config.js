@@ -11,10 +11,11 @@ module.exports = {
   environments: {
     production: {
       type: 'aliyun',
-      region: '',
-      bucket: '',
-      accessKeyId: '',
-      accessKeySecret: '',
+      region: 'oss-cn-hangzhou',
+      bucket: 'xxx',
+      accessKeyId: 'xxx',
+      accessKeySecret: 'xxx',
+      domain: 'https://xxx.xxx.com',
     },
     testing: {
       type: 'qiniu',
@@ -22,6 +23,7 @@ module.exports = {
       bucket: '',
       accessKey: '',
       secretKey: '',
+      domain: '',
     },
     development: {
       type: 'tencent',
@@ -30,6 +32,7 @@ module.exports = {
       appId: '',
       secretId: '',
       secretKey: '',
+      domain: '',
     },
   },
 };

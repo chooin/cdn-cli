@@ -88,6 +88,7 @@ export const setConfig = async (environment) => {
         accessKeyId: config.environment.accessKeyId ?? process.env.accessKeyId,
         accessKeySecret:
           config.environment.accessKeySecret ?? process.env.accessKeySecret,
+        domain: config.environment.domain || process.env.domain || '',
       };
     }
     if (config.environment.type === Types.Qiniu) {
@@ -97,6 +98,7 @@ export const setConfig = async (environment) => {
         bucket: config.environment.bucket ?? process.env.bucket,
         accessKey: config.environment.accessKey ?? process.env.accessKey,
         secretKey: config.environment.secretKey ?? process.env.secretKey,
+        domain: config.environment.domain || process.env.domain || '',
       };
     }
     if (config.environment.type === Types.Tencent) {
@@ -107,6 +109,7 @@ export const setConfig = async (environment) => {
         appId: config.environment.appId ?? process.env.appId,
         secretId: config.environment.secretId ?? process.env.secretId,
         secretKey: config.environment.secretKey ?? process.env.secretKey,
+        domain: config.environment.domain || process.env.domain || '',
       };
     }
   } else {
