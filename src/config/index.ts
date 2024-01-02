@@ -113,7 +113,9 @@ export const setConfig = async (environment) => {
       };
     }
   } else {
-    logger.error('请确认 cdn.config.js 文件中是否包含 environment');
+    logger.error(
+      `请确认 cdn.config.js 文件中是否包含 environment 为 ${config.environment} 的配置`,
+    );
     process.exit(1);
   }
   config.rules = config.rules
