@@ -1241,7 +1241,7 @@ core-util-is@^1.0.2, core-util-is@~1.0.0:
   resolved "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
 
-cos-nodejs-sdk-v5@^2.11.12:
+cos-nodejs-sdk-v5@2.11.12:
   version "2.11.12"
   resolved "https://registry.npmmirror.com/cos-nodejs-sdk-v5/-/cos-nodejs-sdk-v5-2.11.12.tgz#c35419237db93b3fe4037c9a972a4a0508a8a482"
   integrity sha512-XtSlcrwgcyO8K0LCwNmimtkBErC1yJ55cvZ7nWFWsT0c2AWBw8F/ftGvUhZIZhh7B2SlPdXsFZg+QOU7cwI2GQ==
