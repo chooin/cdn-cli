@@ -57,3 +57,7 @@ declare namespace Environment {
     domain: string;
   };
 }
+
+declare interface Upload {
+  upload(files: File[]): Promise<void>;
+}

@@ -2,7 +2,7 @@ import Oss from 'ali-oss';
 import type { PutObjectOptions } from 'ali-oss';
 import * as logger from '../logger';
 
-class Aliyun {
+class Aliyun implements Upload {
   private client: Oss;
 
   constructor(environment: Environment.Aliyun) {

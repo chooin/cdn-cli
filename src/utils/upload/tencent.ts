@@ -2,7 +2,7 @@ import Cos from 'cos-nodejs-sdk-v5';
 import fs from 'fs-extra';
 import * as logger from '../logger';
 
-class Tencent {
+class Tencent implements Upload {
   private client: Cos;
   private readonly bucket: string;
   private readonly region: string;

@@ -1,7 +1,7 @@
 import qiniu, { form_up } from 'qiniu';
 import * as logger from '../logger';
 
-class Qiniu {
+class Qiniu implements Upload {
   private client: form_up.FormUploader;
   private readonly putExtra: form_up.PutExtra;
   private readonly uploadToken: string;
