@@ -9,17 +9,11 @@ import { Types } from '../enums';
 
 const defaultConfig = (): Config => {
   const configJsPath = path.resolve(process.cwd(), './cdn.config.js');
-  const configMJsPath = path.resolve(process.cwd(), './cdn.config.mjs');
   if (fs.existsSync(configJsPath) && fs.statSync(configJsPath).isFile()) {
     return require(configJsPath);
-  } else if (
-    fs.existsSync(configMJsPath) &&
-    fs.statSync(configMJsPath).isFile()
-  ) {
-    return require(configMJsPath);
   } else {
     logger.error(
-      '请首先运行 npx cdn-cli init 来获取配置文件，然后进行 cdn.config.mjs 文件的配置',
+      '请首先运行 npx cdn-cli init 来获取配置文件，然后进行 cdn.config.js 文件的配置',
     );
     process.exit(1);
   }
@@ -120,7 +114,7 @@ export const setConfig = async (environment) => {
     }
   } else {
     logger.error(
-      `请确认 cdn.config.mjs 文件中是否包含 environment 为 ${config.environment} 的配置`,
+      `请确认 cdn.config.js 文件中是否包含 environment 为 ${config.environment} 的配置`,
     );
     process.exit(1);
   }

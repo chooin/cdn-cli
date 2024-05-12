@@ -14,15 +14,15 @@ program
   .description(yellow('初始化'))
   .action(() => {
     require('../lib/utils/file')
-      .canCopyFile(path.resolve('./cdn.config.mjs'))
+      .canCopyFile(path.resolve('./cdn.config.js'))
       .then(() => {
         require('../lib/utils/file').copyFileSync(
-          path.resolve(__dirname, '../templates/cdn.config.mjs'),
-          path.resolve('./cdn.config.mjs'),
+          path.resolve(__dirname, '../templates/cdn.config.js'),
+          path.resolve('./cdn.config.js'),
         );
       })
       .catch(() => {
-        red('cdn.config.mjs 文件已存在');
+        red('cdn.config.js 文件已存在');
       });
   });
 
