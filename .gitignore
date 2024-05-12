@@ -3,9 +3,9 @@ lib/
 dist/
 .idea
 
-cdn.config.js
+cdn.config.mjs
 yarn-debug.log*
 yarn-error.log*
 .DS_Store
 
-!templates/cdn.config.js
+!templates/cdn.config.mjs
