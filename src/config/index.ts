@@ -8,7 +8,7 @@ import { logger } from '../utils';
 import { Types } from '../enums';
 
 const defaultConfig = (): Config => {
-  const configJsPath = path.resolve(process.cwd(), './cdn.config.mjs');
+  const configJsPath = path.resolve(process.cwd(), './cdn.config.js');
   const configMJsPath = path.resolve(process.cwd(), './cdn.config.mjs');
   if (fs.existsSync(configJsPath) && fs.statSync(configJsPath).isFile()) {
     return require(configJsPath);
