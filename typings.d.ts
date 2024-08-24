@@ -2,13 +2,22 @@ declare enum Types {
   Aliyun = 'aliyun',
   Qiniu = 'qiniu',
   Tencent = 'tencent',
+  Debug = 'debug',
 }
 
 declare interface Config {
   rules: Rule[];
-  environment: Environment.Aliyun | Environment.Qiniu | Environment.Tencent;
+  environment:
+    | Environment.Aliyun
+    | Environment.Qiniu
+    | Environment.Tencent
+    | Environment.Debug;
   environments?: {
-    [k: string]: Environment.Aliyun | Environment.Qiniu | Environment.Tencent;
+    [k: string]:
+      | Environment.Aliyun
+      | Environment.Qiniu
+      | Environment.Tencent
+      | Environment.Debug;
   };
 }
 
@@ -37,7 +46,6 @@ declare namespace Environment {
     accessKeySecret: string;
     domain: string;
   };
-
   type Qiniu = {
     type: Types.Qiniu;
     region: string;
@@ -46,7 +54,6 @@ declare namespace Environment {
     secretKey: string;
     domain: string;
   };
-
   type Tencent = {
     type: Types.Tencent;
     region: string;
@@ -54,6 +61,10 @@ declare namespace Environment {
     appId: string;
     secretId: string;
     secretKey: string;
+    domain: string;
+  };
+  type Debug = {
+    type: Types.Debug;
     domain: string;
   };
 }

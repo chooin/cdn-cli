@@ -1,7 +1,7 @@
 import { setConfig, config } from './config';
 import { upload } from './utils';
 
-const deploy = async (environment): Promise<any> => {
+const deploy = async (environment: string): Promise<any> => {
   await setConfig(environment);
 
   console.log(

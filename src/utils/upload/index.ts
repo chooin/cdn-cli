@@ -1,6 +1,7 @@
 import Aliyun from './aliyun';
 import Qiniu from './qiniu';
 import Tencent from './tencent';
+import Debug from './debug';
 import { Types } from '../../enums';
 import { config } from '../../config';
 
@@ -16,6 +17,9 @@ export const upload = (type: Types, files: File[]): Promise<void> => {
       return new Tencent(config.environment as Environment.Tencent).upload(
         files,
       );
+    }
+    case Types.Debug: {
+      return new Debug(config.environment as Environment.Debug).upload(files);
     }
   }
 };
